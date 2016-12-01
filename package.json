@@ -4,24 +4,28 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "live-server | babel . --out-dir compiled --presets=es2015,react --ignore=node_modules,compiled --source-maps inline --watch",
+    "test": "live-server --open=./SpecRunner.html --port=8081",
+    "postinstall": "curl -s https://raw.githubusercontent.com/reactorcore/pomander/master/bin/install | bash"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/croissant-dvorak/croissant-dvorak.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/croissant-dvorak/croissant-dvorak/issues"
-  },
-  "homepage": "https://github.com/croissant-dvorak/croissant-dvorak#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "mongodb": "^2.2.12",
     "mongoose": "^4.7.1",
     "path": "^0.12.7",
-    "react": "^15.4.1"
+    "react": "^15.4.1",
+    "bootstrap": "^4.0.0-alpha.2",
+    "jquery": "^2.2.1",
+    "lodash": "^4.6.1",
+    "react-dom": "^0.14.7"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.6.5",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-react": "^6.5.0",
+    "chai": "^3.5.0",
+    "mocha": "2.3.3",
+    "sinon": "1.17.3"
   }
 }
