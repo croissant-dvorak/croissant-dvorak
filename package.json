@@ -1,0 +1,26 @@
+{
+  "name": "croissant-dvorak",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/croissant-dvorak/croissant-dvorak.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/croissant-dvorak/croissant-dvorak/issues"
+  },
+  "homepage": "https://github.com/croissant-dvorak/croissant-dvorak#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongodb": "^2.2.12",
+    "mongoose": "^4.7.1",
+    "react": "^15.4.1"
+  }
+}
