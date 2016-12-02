@@ -5,53 +5,58 @@ var path = require('path');
 var db = require('./db.js');
 var config = require('./config.js');
 var cookieParser = require('cookie-parser');
+var passport = require('passport');
+var FacebookStrategy = require('passport-facebook').Strategy;
 var app = express();
-var AuthPort = require('AuthPort');
 module.exports = app;
 app.use(express.static(__dirname + '/../client'));
 // app.set('view engine', 'ejs');
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
+
+app.use(session({
+    secret: 'favorite food',
+    key: 'dvorak'
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-
-AuthPort.createServer(config.fbObj);
-
-// authport
-AuthPort.on("auth", function(req, res, data) {
-  //check if new user
-  db.getUserIDForUser(data.data.login, function(err, users){
-    if (err){
-      console.log('error on user lookup', err);
-      res.set('location', '/');
-      res.sendStatus(500);
-    } else {
-      if (users.length){ // is already a user
-        console.log('found user', users[0]);
-        createSessionAndRedirect(users[0].id, data.token, res);
-      } else { // make a new user
-        db.addUser(data.data, function(err, result){
-          if (err){
-            res.status(500).send(err);
-          } else {
-            console.log('inserted user');
-            createSessionAndRedirect(result[0], data.token, res);
-          }
+passport.use(new FacebookStrategy({
+        clientID: config.fbObj.facebook_api_key,
+        clientSecret: config.fbObj.facebook_api_secret,
+        callbackURL: config.fbObj.callback_url
+    },
+    function(accessToken, refreshToken, profile, done) {
+        process.nextTick(function() {
+            //Check whether the User exists or not using profile.id
+            return done(null, profile);
         });
-      }
     }
-  });
+));
+
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+passport.deserializeUser(function(obj, done) {
+    done(null, obj);
 });
 
-AuthPort.on("error", function(req, res, data){
-  res.status(500).send("An error occurred: " + JSON.stringify(data));
-});
-
-app.get("/auth/:service", AuthPort.app);
+app.get('/auth/facebook', passport.authenticate('facebook'));
+app.get('/auth/facebook/callback', passport.authenticate('facebook', {
+        failureRedirect: '/login'
+    }),
+    function(req, res) {
+        console.log('holy fuuuuck')
+            // Successful authentication, redirect home.
+        res.redirect('/');
+    });
 
 
 app.get('/logout', function(req, res) {
@@ -60,7 +65,11 @@ app.get('/logout', function(req, res) {
 });
 
 
-app.get('/', function(req, res) {
+app.get('/login', function(req, res) {
+    res.sendFile(path.resolve(__dirname + '/../client/testingLogin.html'));
+});
+
+app.get('/', ensureAuthenticated, function(req, res) {
     res.sendFile(path.resolve(__dirname + '/../client/testing.html'));
 });
 
@@ -69,6 +78,13 @@ app.get('/account', function(req, res) {
         user: req.user
     });
 });
+
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/login');
+}
 
 app.post('/projects', function(req, res) {});
 

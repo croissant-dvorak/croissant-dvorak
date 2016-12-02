@@ -44,4 +44,3 @@ jspm_packages
 .node_repl_history
 
 /server/config.js
-/client/testing.html
