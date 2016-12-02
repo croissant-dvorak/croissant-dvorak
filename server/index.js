@@ -1,8 +1,10 @@
+'use strict';
 var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var path = require('path');
 var db = require('./db.js');
+var models = require('./models.js');
 var config = require('./config.js');
 var cookieParser = require('cookie-parser');
 var passport = require('passport');
@@ -28,48 +30,71 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+app.use(function(req, res, next){
+    console.log('---------');
+    console.log('Received', req.method, req.url);
+    next();
+});
+
 passport.use(new FacebookStrategy({
         clientID: config.fbObj.facebook_api_key,
         clientSecret: config.fbObj.facebook_api_secret,
         callbackURL: config.fbObj.callback_url
     },
-    function(accessToken, refreshToken, profile, done) {
-        process.nextTick(function() {
-            //Check whether the User exists or not using profile.id
-            return done(null, profile);
+    function(accessToken, refreshToken, profile, cb) {
+        console.log('profile', profile);
+        models.User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+            console.log('in findOrCreate', user);
+          return cb(err, user);
         });
-    }
+      }
 ));
 
 passport.serializeUser(function(user, done) {
-    done(null, user);
+    console.log('serializeUser', user);
+  done(null, user.facebookId);
 });
-passport.deserializeUser(function(obj, done) {
-    done(null, obj);
+
+passport.deserializeUser(function(id, done) {
+    console.log('deserializeUser', id);
+  db.getUserByFacebookId(id, function (err, user) {
+    done(err, user);
+    return 'hello';
+  });
 });
 
 app.get('/auth/facebook', passport.authenticate('facebook'));
+
 app.get('/auth/facebook/callback', passport.authenticate('facebook', {
         failureRedirect: '/login'
     }),
     function(req, res) {
-        console.log('holy fuuuuck')
+        console.log('holy fuuuuck');
             // Successful authentication, redirect home.
         res.redirect('/');
     });
 
+function ensureAuthenticated(req, res, next) {
+    console.log('checking auth');
+    if (req.isAuthenticated()) {
+        console.log('you may passs');
+        return next();
+    } else {
+        console.log('not logged in');
+        res.redirect('/login');
+    }
+}
 
 app.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 });
 
-
 app.get('/login', function(req, res) {
     res.sendFile(path.resolve(__dirname + '/../client/testingLogin.html'));
 });
 
-app.get('/', ensureAuthenticated, function(req, res) {
+app.get('/', function(req, res) {
     res.sendFile(path.resolve(__dirname + '/../client/testing.html'));
 });
 
@@ -79,14 +104,19 @@ app.get('/account', function(req, res) {
     });
 });
 
-function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect('/login');
-}
-
-app.post('/projects', function(req, res) {});
+app.post('/projects', 
+    ensureAuthenticated,
+    function(req, res) {
+        db.postProject(req.body, function(err, result){
+            if (err) { 
+                console.error(err);
+            } else {
+                console.log('project post result', result);
+                res.location('/');
+                res.sendStatus(301);
+            }
+        });
+    });
 
 app.get('/projects', function(req, res) {
     db.getProjects(function(err, projects) {
@@ -100,8 +130,14 @@ app.get('/sessions', function(req, res) {
     });
 });
 
-app.post('/users', function(req, res) {
-    res.sendFile(path.resolve(__dirname + '/../client/index.html'));
+app.post('/users', ensureAuthenticated, function(req, res) {
+    db.postUser(req.body, function(err, result){
+        if (err) {
+            console.error('Error', err);
+        } else {
+            res.send(result);
+        }
+    });
 });
 
 app.get('/users', function(req, res) {
