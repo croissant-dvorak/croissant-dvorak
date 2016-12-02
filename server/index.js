@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
 var app = express();
+var db = require('/db.js');
 module.exports = app;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -11,6 +12,22 @@ app.use(bodyParser.urlencoded({
 //changes have been made
 
 app.get('/', function (req, res) {
+  res.sendFile(path.resolve(__dirname + '/../client/index.html'));
+});
+
+app.post('/projects', function (req, res) {
+  res.sendFile(path.resolve(__dirname + '/../client/index.html'));
+});
+
+app.get('/projects', function (req, res) {
+  res.sendFile(path.resolve(__dirname + '/../client/index.html'));
+});
+
+app.post('/users', function (req, res) {
+  res.sendFile(path.resolve(__dirname + '/../client/index.html'));
+});
+
+app.get('/users', function (req, res) {
   res.sendFile(path.resolve(__dirname + '/../client/index.html'));
 });
 
