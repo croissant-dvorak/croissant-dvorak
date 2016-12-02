@@ -43,6 +43,10 @@ app.get('/users', function (req, res) {
   });
 });
 
+app.get('/*', function(req, res){
+  res.status(404).end('not found');
+});
+
 var port = process.env.PORT || 4040;
 app.listen(port);
 console.log("Listening on port " + port);
