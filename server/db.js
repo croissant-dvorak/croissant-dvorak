@@ -5,14 +5,15 @@ mongoose.Promise = require('bluebird');
 // ----- EXPORTS -----
 module.exports = {
   getProjects : getProjects,
-  postProject: postProject,
+  getProjectById : getProjectById,
+  postProject : postProject,
   getUsers : getUsers,
-  getUser : getUser,
+  getUserById : getUserById,
   postUser : postUser,
-  getSession: getSession,
+  getSessionById : getSessionById,
   postSession : postSession,
-  getFeedbackForProject : getFeedbackForProject,
-  getFeedbackForUser : getFeedbackForUser,
+  getFeedbackByProjectId : getFeedbackByProjectId,
+  getFeedbackByUserId : getFeedbackByUserId,
   postFeedback : postFeedback
 };
 
@@ -56,7 +57,7 @@ models.Project = mongoose.model('Project', projectSchema);
 
 var feedbackSchema = mongoose.Schema({
   userId: mongoose.Schema.ObjectId,
-  projId: mongoose.Schema.ObjectId,
+  projectId: mongoose.Schema.ObjectId,
   textData: String,
   date: Date
 });
@@ -73,7 +74,7 @@ var userSchema = mongoose.Schema({
 models.User = mongoose.model('User', userSchema);
 
 var sessionSchema = mongoose.Schema({
-  sessionID: String,
+  sessionId: String,
   userId: mongoose.Schema.ObjectId
 });
 
@@ -85,6 +86,18 @@ models.Session = mongoose.model('Session', sessionSchema);
 
 function getProjects(cb){
   models.Project.find()
+    .then(function(res){
+      console.log('projects' , res);
+      cb(null, res);
+  })
+    .catch(function(err){
+      console.error('Error', err);
+      cb(err);
+    });
+}
+
+function getProjectById(projectId, cb){
+  models.Project.findOne({_id: projectId})
     .then(function(res){
       console.log('projects' , res);
       cb(null, res);
@@ -119,8 +132,8 @@ function getUsers(cb){
     });
 }
 
-function getUser(userID, cb){
-  models.User.findOne({_id : userID})
+function getUserById(userId, cb){
+  models.User.findOne({_id : userId})
     .then(function(res){
       console.log('user' , res);
       cb(null, res);
@@ -143,8 +156,8 @@ function postUser(user, cb){
 
 // ----- SESSION METHODS -----
 
-function getSession(sessionID, cb){
-  models.Session.findOne({sessionID: sessionID})
+function getSessionById(sessionId, cb){
+  models.Session.findOne({sessionId: sessionId})
     .then(function(res){
       console.log('session' , res);
       cb(null, res);
@@ -168,8 +181,8 @@ function postSession(session, cb){
 
 // ----- FEEDBACK METHODS -----
 
-function getFeedbackForProject(projectID, cb){
-  models.Feedback.find({projectID: projectID})
+function getFeedbackByProjectId(projectId, cb){
+  models.Feedback.find({projId: projectId})
     .then(function(res){
       console.log('feedback for project' , res);
       cb(null, res);
@@ -180,8 +193,8 @@ function getFeedbackForProject(projectID, cb){
     });
 }
 
-function getFeedbackForUser(userID, cb){
-  models.Feedback.find({userID: userID})
+function getFeedbackByUserId(userId, cb){
+  models.Feedback.find({userId: userId})
     .then(function(res){
       console.log('feedback for user' , res);
       cb(null, res);
@@ -192,8 +205,8 @@ function getFeedbackForUser(userID, cb){
     });
 }
 
-function postFeedback(session, cb){
-  models.Feedback(session).save()
+function postFeedback(feedback, cb){
+  models.Feedback(feedback).save()
     .then(function(res){
       cb(null, res);
     })
