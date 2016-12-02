@@ -7,13 +7,17 @@ module.exports = {
   getProjects : getProjects,
   postProject: postProject,
   getUsers : getUsers,
+  getUser : getUser,
   postUser : postUser,
   getSession: getSession,
-  postSession : postSession
+  postSession : postSession,
+  getFeedbackForProject : getFeedbackForProject,
+  getFeedbackForUser : getFeedbackForUser,
+  postFeedback : postFeedback
 };
 
 // ----- SETUP DB -----
-var mongoURI = 'mongodb://'+require('./config.js').username+':'+require('./config.js').pw+'@ds119718.mlab.com:19718/croissant-dvorak';
+var mongoURI = 'mongodb://'+require('./config.js').mlObj.username+':'+require('./config.js').mlObj.pw+'@ds119718.mlab.com:19718/croissant-dvorak';
 mongoose.connect(mongoURI);
 
 var db = mongoose.connection;
@@ -115,6 +119,18 @@ function getUsers(cb){
     });
 }
 
+function getUser(userID, cb){
+  models.User.findOne({_id : userID})
+    .then(function(res){
+      console.log('user' , res);
+      cb(null, res);
+  })
+    .catch(function(err){
+      console.error('Error', err);
+      cb(err);
+    });
+}
+
 function postUser(user, cb){
   models.User(user).save()
     .then(function(res){
@@ -127,7 +143,7 @@ function postUser(user, cb){
 
 // ----- SESSION METHODS -----
 
-function getSession(sessionID,cb){
+function getSession(sessionID, cb){
   models.Session.findOne({sessionID: sessionID})
     .then(function(res){
       console.log('session' , res);
@@ -140,11 +156,49 @@ function getSession(sessionID,cb){
 }
 
 function postSession(session, cb){
-  models.Session({sessionID: session.sessionID, userId: session.userId}).save()
+  models.Session(session).save()
     .then(function(res){
       cb(null, res);
     })
     .catch(function(err){
+      console.error('Error', err);
+      cb(err);
+    });
+}
+
+// ----- FEEDBACK METHODS -----
+
+function getFeedbackForProject(projectID, cb){
+  models.Feedback.find({projectID: projectID})
+    .then(function(res){
+      console.log('feedback for project' , res);
+      cb(null, res);
+  })
+    .catch(function(err){
+      console.error('Error', err);
+      cb(err);
+    });
+}
+
+function getFeedbackForUser(userID, cb){
+  models.Feedback.find({userID: userID})
+    .then(function(res){
+      console.log('feedback for user' , res);
+      cb(null, res);
+  })
+    .catch(function(err){
+      console.error('Error', err);
+      cb(err);
+    });
+}
+
+function postFeedback(session, cb){
+  models.Feedback(session).save()
+    .then(function(res){
+      cb(null, res);
+    })
+    .catch(function(err){
+      console.error('Error', err);
       cb(err);
     });
 }
