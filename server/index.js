@@ -9,18 +9,28 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-//changes have been made
+
+app.use(express.static(__dirname + '/../client'));
 
 app.get('/', function (req, res) {
-  res.sendFile(path.resolve(__dirname + '/../client/index.html'));
+  res.status(200);
+  res.sendFile(path.join(__dirname + '/../client/index.html'));
 });
 
 app.post('/projects', function (req, res) {
-  res.sendFile(path.resolve(__dirname + '/../client/index.html'));
 });
 
 app.get('/projects', function (req, res) {
-  res.sendFile(path.resolve(__dirname + '/../client/index.html'));
+  db.getProjects(function(err, projects) {
+    res.status(200).end(projects);
+  });
+});
+
+app.get('/sessions', function (req, res) {
+
+  db.getSession(function(err, session) {
+    res.status(200).end(session);
+  });
 });
 
 app.post('/users', function (req, res) {
@@ -28,7 +38,9 @@ app.post('/users', function (req, res) {
 });
 
 app.get('/users', function (req, res) {
-  res.sendFile(path.resolve(__dirname + '/../client/index.html'));
+  db.getUsers(function(err, projects) {
+    res.status(200).end(projects);
+  });
 });
 
 var port = process.env.PORT || 4040;
