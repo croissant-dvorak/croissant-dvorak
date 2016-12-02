@@ -6,7 +6,7 @@ module.exports = {
   getProjects : getProjects,
   getUsers : getUsers,
   getSession: getSession
-}
+};
 
 // ----- SETUP DB -----
 var mongoURI = 'mongodb://'+require('./config.js').username+':'+require('./config.js').pw+'@ds119718.mlab.com:19718/croissant-dvorak';
@@ -48,7 +48,7 @@ var feedbackSchema = mongoose.Schema({
   proj_id: mongoose.Schema.ObjectId,
   text_data: String,
   date: Date
-})
+});
 
 var Feedback = mongoose.model('Feedback', feedbackSchema);
 
@@ -57,14 +57,14 @@ var userSchema = mongoose.Schema({
   firstName: String,
   lastName: String,
   email: String
-})
+});
 
 var User = mongoose.model('User', userSchema);
 
 var sessionSchema = mongoose.Schema({
   session_id: String,
   user_id: mongoose.Schema.ObjectId
-})
+});
 
 var Session = mongoose.model('Session', sessionSchema);
 
@@ -106,5 +106,3 @@ function getSession(cb){
       cb(err);
     });
 }
-
-
