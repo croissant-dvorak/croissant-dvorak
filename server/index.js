@@ -3,12 +3,12 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var app = express();
 var db = require('/db.js');
+var cookie = require('cookie');
 module.exports = app;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-
 
 app.use(express.static(__dirname + '/../client'));
 
@@ -27,7 +27,6 @@ app.get('/projects', function (req, res) {
 });
 
 app.get('/sessions', function (req, res) {
-
   db.getSession(function(err, session) {
     res.status(200).end(session);
   });
