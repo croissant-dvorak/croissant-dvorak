@@ -1,9 +1,11 @@
 var mongoose = require('mongoose');
-
+mongoose.Promise = require('bluebird');
 
 // ----- EXPORTS -----
 module.exports = {
-
+  getProjects : getProjects,
+  getUsers : getUsers,
+  getSession: getSession
 }
 
 // ----- SETUP DB -----
@@ -68,3 +70,41 @@ var Session = mongoose.model('Session', sessionSchema);
 
 
 // ----- METHODS -----
+
+function getProjects(cb){
+  Project.find()
+    .then(function(res){
+      console.log('projects' , res);
+      cb(null, res);
+  })
+    .catch(function(err){
+      console.error('Error', err);
+      cb(err);
+    });
+}
+
+function getUsers(cb){
+  User.find()
+    .then(function(res){
+      console.log('users' , res);
+      cb(null, res);
+  })
+    .catch(function(err){
+      console.error('Error', err);
+      cb(err);
+    });
+}
+
+function getSession(cb){
+  Session.findOne()
+    .then(function(res){
+      console.log('projects' , res);
+      cb(null, res);
+  })
+    .catch(function(err){
+      console.error('Error', err);
+      cb(err);
+    });
+}
+
+
