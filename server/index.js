@@ -119,7 +119,7 @@ app.post('/projects',
 
 app.get('/projects', function(req, res) {
     db.getProjects(function(err, projects) {
-        res.status(200).end(projects);
+        res.status(200).end(JSON.stringify(projects));
     });
 });
 

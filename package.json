@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "live-server | babel . --out-dir compiled --presets=es2015,react --ignore=node_modules,compiled --source-maps inline --watch, node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    "test": "live-server --open=./SpecRunner.html --port=8081",
-    "postinstall": "curl -s https://raw.githubusercontent.com/reactorcore/pomander/master/bin/install | bash"
+    "start": "nodemon server/index.js"
   },
   "dependencies": {
     "babel-preset-stage-1": "^6.1.18",
