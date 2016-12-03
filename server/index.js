@@ -36,19 +36,19 @@ app.use(function(req, res, next){
     next();
 });
 
-passport.use(new FacebookStrategy({
-        clientID: config.fbObj.facebook_api_key,
-        clientSecret: config.fbObj.facebook_api_secret,
-        callbackURL: config.fbObj.callback_url
-    },
+passport.use(new FacebookStrategy(config.fbObj,
     function(accessToken, refreshToken, profile, cb) {
         console.log('profile', profile);
-        models.User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+        models.User.findOrCreate({ facebookId: profile.id, email: profile._json.email }, function (err, user) {
             console.log('in findOrCreate', user);
           return cb(err, user);
         });
       }
 ));
+
+// function getUserEmail(accessToken){
+
+// };
 
 passport.serializeUser(function(user, done) {
     console.log('serializeUser', user);
@@ -63,7 +63,7 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-app.get('/auth/facebook', passport.authenticate('facebook'));
+app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email']}));
 
 app.get('/auth/facebook/callback', passport.authenticate('facebook', {
         failureRedirect: '/login'
