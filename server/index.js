@@ -93,6 +93,10 @@ app.get('/logout', function(req, res) {
 app.get('/login', function(req, res) {
     res.sendFile(path.resolve(__dirname + '/../client/testingLogin.html'));
 });
+//
+// app.get('/', ensureAuthenticated, function(req, res) {
+//     res.render('index');
+// });
 
 
 // ----- ROUTES -----
