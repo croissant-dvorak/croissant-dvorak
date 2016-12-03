@@ -30,10 +30,8 @@ module.exports = React.createClass({
 			<div>{this.state.messages}</div>
 			<form onSubmit={this.submit}>
 				<input value={this.state.input} onChange={this.updateInput} type="text" />
-				<input type="submit" value="Send" />
+				<input type="submit" value="Send a message" />
 			</form>
 		</div>;
 	}
 });
-
-
