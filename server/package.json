@@ -7,20 +7,14 @@
     "start": "nodemon index.js"
   },
   "dependencies": {
-    "babel-preset-stage-1": "^6.1.18",
     "body-parser": "^1.15.2",
-    "bootstrap": "^4.0.0-alpha.2",
     "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
     "express-session": "^1.14.2",
-    "jquery": "^2.2.1",
-    "lodash": "^3.10.1",
-    "mongodb": "^2.2.12",
     "mongoose": "^4.7.1",
     "mongoose-findorcreate": "^0.1.2",
     "passport": "^0.3.2",
-    "passport-facebook": "^2.1.1",
-    "path": "^0.12.7"
+    "passport-facebook": "^2.1.1"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"
