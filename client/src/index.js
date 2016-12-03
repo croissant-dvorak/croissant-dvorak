@@ -1,6 +1,9 @@
-// TODO: Render the `App` component to the DOM
+var ReactDOM = require('react-dom');
+var React = require('react');
+
+var Chat = require('./Chat');
 
 ReactDOM.render(
-  <App searchYouTube={searchYouTube} API_KEY={YOUTUBE_API_KEY}/>,
-  document.getElementById('app')
+	<Chat />,
+	document.getElementById('app')
 );
