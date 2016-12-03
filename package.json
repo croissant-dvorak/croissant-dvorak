@@ -1,0 +1,20 @@
+{
+  "name": "croissant-dvorak",
+  "version": "0.0.1",
+  "description": "HackReactor Greenfield Project",
+  "main": "index.js",
+  "scripts": {
+    "install": "(cd client && npm install) && (cd server && npm install)",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/croissant-dvorak/croissant-dvorak.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/croissant-dvorak/croissant-dvorak/issues"
+  },
+  "homepage": "https://github.com/croissant-dvorak/croissant-dvorak#readme"
+}
