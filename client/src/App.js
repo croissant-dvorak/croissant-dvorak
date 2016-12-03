@@ -19,13 +19,13 @@ class App extends React.Component {
 
   componentDidMount () {
     this.fetchProjects();
-	this.getProjects();
+    // this.getProjects();
   }
 
-	getProjects() {
-    	console.log('we did it!!!')
+  getProjects() {
+      console.log('we did it!!!')
         $.ajax({
-            url: '/projects',
+            url: 'http://localhost:4040/projects',
             success: function(data) {
                 this.setState({ data: data });
             }.bind(this),
@@ -43,7 +43,7 @@ class App extends React.Component {
     }
 
   fetchProjects(){
-    fetch('./projects')
+    fetch('http://localhost:4040/projects')
       .then(function(res){
         console.log('res', res);
         return res.json();
@@ -62,8 +62,9 @@ class App extends React.Component {
     	//add this in the return statement>>>> { someComponent }
     return (
       <div>
+        <div> Hello pagejjjj </div>
+        <Buttons addProject={this.addProjectClick.bind(this)} /> 
         <ProjectList projects={this.state.projects} />
-        <div> Hello page </div>
       </div>
     );
   }
