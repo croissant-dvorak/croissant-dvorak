@@ -6,7 +6,8 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-        	data: null
+        	data: null,
+        	projectEntry: false
         };
     }
     componentDidMount() {
@@ -26,8 +27,21 @@ class App extends React.Component {
         });
     }
 
+    addProjectClick(){
+    	console.log('the click function worked!')
+    	this.setState({
+    		projectEntry: true
+    	})
+    }
+
     render() {
-        return ( < Buttons /> );
+    	// var someComponent = this.state.projectEntry ? <ProjectCompoinent/> : <SomeOther />
+    	//add this in the return statement>>>> { someComponent }
+
+        return ( 
+        	 
+        	<Buttons addProject={this.addProjectClick.bind(this)} /> 
+        	);
     }
 }
 
