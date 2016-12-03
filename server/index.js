@@ -123,13 +123,13 @@ app.post('/projects',
 
 app.get('/projects', function(req, res) {
     db.getProjects(function(err, projects) {
-        res.status(200).end(projects);
+        res.status(200).end(JSON.stringify(projects));
     });
 });
 
 app.get('/sessions', function(req, res) {
     db.getSession(function(err, session) {
-        res.status(200).end(session);
+        res.status(200).end(JSON.stringify(session));
     });
 });
 
@@ -144,13 +144,13 @@ app.post('/users', ensureAuthenticated, function(req, res) {
 });
 
 app.get('/users', function(req, res) {
-    db.getUsers(function(err, projects) {
-        res.status(200).end(projects);
+    db.getUsers(function(err, users) {
+        res.status(200).end(JSON.stringify(users));
     });
 });
 
 app.get('/*', function(req, res) {
-    res.status(404).end('not found');
+    res.sendStatus(404);
 });
 
 // ----- LISTEN -----
