@@ -9,39 +9,41 @@ var config = require('./config.js');
 var cookieParser = require('cookie-parser');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
+
 var app = express();
+
 module.exports = app;
+
+// ----- MIDDLEWARE -----
 app.use(express.static(__dirname + '/../client'));
-// app.set('view engine', 'ejs');
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-
 app.use(session({
     secret: 'favorite food',
-    key: 'dvorak'
+    key: 'dvorak',
+    resave: false, // Forces the session to be saved back to the session store, even if the session was never modified during the request. 
+    saveUninitialized: false  //Forces a session that is "uninitialized" to be saved to the store.
 }));
-
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-
-app.use(function(req, res, next){
+app.use(function(req, res, next){  // print out requests
     console.log('---------');
     console.log('Received', req.method, req.url);
     next();
 });
-
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+app.use(function(req, res, next) { // add cors headers to all responses
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
 
+// ----- PASSPORT FOR AUTH -----
 passport.use(new FacebookStrategy(config.fbObj,
     function(accessToken, refreshToken, profile, cb) {
         console.log('profile', profile);
@@ -51,22 +53,20 @@ passport.use(new FacebookStrategy(config.fbObj,
         });
       }
 ));
-
 passport.serializeUser(function(user, done) {
     console.log('serializeUser', user);
-  done(null, user.facebookId);
+    done(null, user.facebookId);
 });
-
 passport.deserializeUser(function(id, done) {
     console.log('deserializeUser', id);
-  db.getUserByFacebookId(id, function (err, user) {
-    done(err, user);
-    return 'hello';
-  });
+    db.getUserByFacebookId(id, function (err, user) {
+        done(err, user);
+        return 'hello';
+    });
 });
 
+// ----- AUTH ROUTES -----
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email']}));
-
 app.get('/auth/facebook/callback', passport.authenticate('facebook', {
         failureRedirect: '/login'
     }),
@@ -90,13 +90,14 @@ app.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 });
-
 app.get('/login', function(req, res) {
     res.sendFile(path.resolve(__dirname + '/../client/testingLogin.html'));
 });
 
+
+// ----- ROUTES -----
 app.get('/', function(req, res) {
-    res.sendFile(path.resolve(__dirname + '/../client/testing.html'));
+    res.sendFile(path.resolve(__dirname + '/../client/index.html'));
 });
 
 app.get('/account', function(req, res) {
@@ -117,7 +118,8 @@ app.post('/projects',
                 res.sendStatus(301);
             }
         });
-    });
+    }
+);
 
 app.get('/projects', function(req, res) {
     db.getProjects(function(err, projects) {
@@ -151,6 +153,7 @@ app.get('/*', function(req, res) {
     res.status(404).end('not found');
 });
 
+// ----- LISTEN -----
 var port = process.env.PORT || 4040;
 app.listen(port);
-console.log("Listening on port " + port);
+console.log('Listening on port ' + port);

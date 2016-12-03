@@ -1,10 +1,10 @@
 {
-  "name": "croissant-dvorak",
+  "name": "croissant-dvorak-backend",
   "version": "0.0.1",
-  "description": "",
+  "description": "The backend to croissant-dvorak",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server/index.js | (cd client && npm start)"
+    "start": "nodemon server/index.js"
   },
   "dependencies": {
     "babel-preset-stage-1": "^6.1.18",

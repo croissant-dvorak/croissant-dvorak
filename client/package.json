@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "live-server | watchify -t [ babelify --presets [ react ] ] src/index.js -o build/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "browserify -t [ babelify --presets [ react ] ] src/index.js -o build/app.js"
   },
@@ -14,5 +15,8 @@
     "babelify": "^7.2.0",
     "react": "^0.14.6",
     "react-dom": "^0.14.6"
+  },
+  "devDependencies": {
+    "live-server": "^1.1.0"
   }
 }
