@@ -36,6 +36,12 @@ app.use(function(req, res, next){
     next();
 });
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 passport.use(new FacebookStrategy(config.fbObj,
     function(accessToken, refreshToken, profile, cb) {
         console.log('profile', profile);
