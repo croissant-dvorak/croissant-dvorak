@@ -46,10 +46,6 @@ passport.use(new FacebookStrategy(config.fbObj,
       }
 ));
 
-// function getUserEmail(accessToken){
-
-// };
-
 passport.serializeUser(function(user, done) {
     console.log('serializeUser', user);
   done(null, user.facebookId);
