@@ -1,5 +1,5 @@
 var React = require('react');
-var ProjectList = require('./ProjectList');
+var ProjectList = require('./ProjectList.jsx');
 require('whatwg-fetch');
 
 var data = require('../data');
@@ -35,25 +35,25 @@ class App extends React.Component {
         });
     }
 
-	addProjectClick(){
-    	console.log('the click function worked!')
-    	this.setState({
-    		projectEntry: true
-    	})
-    }
+  addProjectClick(){
+    console.log('the click function worked!');
+    this.setState({
+      projectEntry: true,
+    });
+  }
 
   fetchProjects(){
     fetch('http://localhost:4040/projects')
-      .then(function(res){
+      .then(function(res) {
         console.log('res', res);
         return res.json();
       })
-      .catch(function(err){
+      .catch(function(err) {
         console.error('err', err);
       })
-      .then((function(json){
-        this.setState({projects: json});
-        console.log('setting state!')
+      .then((function(json) {
+        this.setState({ projects: json });
+        console.log('setting state!');
       }).bind(this));
   }
 
@@ -62,9 +62,19 @@ class App extends React.Component {
     	//add this in the return statement>>>> { someComponent }
     return (
       <div>
-        <div> Hello pagejjjj </div>
-        <Buttons addProject={this.addProjectClick.bind(this)} /> 
-        <ProjectList projects={this.state.projects} />
+        <div className="row title-bar">
+          <div className="col-md-7 offset-md-1">
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-7 offset-md-1">
+            <Buttons addProject={this.addProjectClick.bind(this)} />
+            <ProjectList projects={this.state.projects} />
+          </div>
+          <div className="col-md-4">
+            Find a project near me
+          </div>
+        </div>
       </div>
     );
   }

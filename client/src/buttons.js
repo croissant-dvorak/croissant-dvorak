@@ -2,10 +2,10 @@ var React = require('react');
 
 const Buttons = ({addProject}) => {
 	return (
-	<div>
-		<div className="navButtons" onClick={() => addProject()}><a href='#'>Add a Project</a></div>
-		<div className="navButtons">Give Feedback on a Project</div>
-	</div>
+  	<div>
+  		<button className="btn btn-info" onClick={() => addProject()}><a href='#'>Add a Project</a></button>
+  		<button className="btn btn-info">Give Feedback on a Project</button>
+  	</div>
 	);
 }
 
