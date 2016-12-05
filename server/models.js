@@ -28,15 +28,15 @@ projectSchema.plugin(QueryPlugin);
 projectSchema.plugin(findOrCreate);
 exports.Project = mongoose.model('Project', projectSchema);
 
-var feedbackSchema = mongoose.Schema({
+var CommentSchema = mongoose.Schema({
   userId: mongoose.Schema.ObjectId,
   projectId: mongoose.Schema.ObjectId,
   textData: String,
   date: Date
 });
 
-feedbackSchema.plugin(findOrCreate);
-exports.Feedback = mongoose.model('Feedback', feedbackSchema);
+CommentSchema.plugin(findOrCreate);
+exports.Comment = mongoose.model('Comment', CommentSchema);
 
 var userSchema = mongoose.Schema({
   username: String,

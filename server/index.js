@@ -95,7 +95,7 @@ app.get('/logout', function(req, res) {
 });
 //temp fix:
 app.get('/login', function(req, res) {
-    res.redirect('/')
+    res.redirect('/auth/facebook')
 });
 
 
@@ -134,10 +134,11 @@ app.post('/api/projects/',
     function(req, res) {
         db.postProject(req.body, function(err, result){ //post the project to the db
             if (err) {
+                res.end('please login!').sendStatus(400);
                 console.error(err);
             } else {
                 // console.log('project post result', result);
-                res.location('/'); //return to index
+                res.redirect('/'); //return to index
                 res.sendStatus(201); //201 data good
             }
         });
