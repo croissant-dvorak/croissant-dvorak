@@ -1,5 +1,3 @@
-//CommentList.jsx
-
 const React = require('react');
 const CommentListItem = require('./CommentListItem.jsx');
 
