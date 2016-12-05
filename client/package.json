@@ -1,0 +1,24 @@
+{
+  "name": "react-chat",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "live-server | watchify -t [ babelify --presets [ react ] ] src/index.js -o build/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "browserify -t [ babelify --presets [ react ] ] src/index.js -o build/app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-preset-react": "^6.3.13",
+    "babelify": "^7.2.0",
+    "react": "^0.14.6",
+    "react-bootstrap-4-typeahead": "^0.8.7",
+    "react-dom": "^0.14.6"
+  },
+  "devDependencies": {
+    "live-server": "^1.1.0",
+    "watchify": "^3.7.0"
+  }
+}

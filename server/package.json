@@ -1,0 +1,33 @@
+{
+  "name": "croissant-dvorak-backend",
+  "version": "0.0.1",
+  "description": "The backend to croissant-dvorak",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.0",
+    "express-session": "^1.14.2",
+    "mongoose": "^4.7.1",
+    "mongoose-findorcreate": "^0.1.2",
+    "mongoose-query": "^0.2.0",
+    "passport": "^0.3.2",
+    "passport-facebook": "^2.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/croissant-dvorak/croissant-dvorak.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/croissant-dvorak/croissant-dvorak/issues"
+  },
+  "homepage": "https://github.com/croissant-dvorak/croissant-dvorak#readme"
+}
