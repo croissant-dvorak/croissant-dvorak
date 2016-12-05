@@ -9,7 +9,7 @@ const CommentListItem = (props) => {
           <img src={props.comment.thumbnail}/>
         </div>
         <div className="col-sm-8 col-md-10 commentListItem-Body">
-          <div>{props.comment.user_id}</div>
+          <div>{props.comment.username}</div>
           <div>{props.comment.text_data}</div>
           <div>{props.comment.date}</div>
         </div>
