@@ -1,9 +1,9 @@
-var React = require('react');
-var ProjectList = require('./ProjectList.jsx');
+const React = require('react');
+const ProjectList = require('./ProjectList.jsx');
+const FindNearbyProject = require('./FindNearbyProject.jsx');
 require('whatwg-fetch');
 
-var data = require('../data');
-var Buttons = require('./buttons.js');
+const Buttons = require('./Buttons.jsx');
 
 class App extends React.Component {
   constructor(props) {
@@ -12,9 +12,8 @@ class App extends React.Component {
     this.state = {
 	  data: null,
       projectEntry: false,
-      projects : []
+      projects: [],
     };
-
   }
 
   componentDidMount () {
@@ -23,7 +22,7 @@ class App extends React.Component {
   }
 
   getProjects() {
-      console.log('we did it!!!')
+      console.log('we did it!!!');
         $.ajax({
             url: 'http://localhost:4040/projects',
             success: function(data) {
@@ -31,9 +30,9 @@ class App extends React.Component {
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
-            }.bind(this)
+            }.bind(this),
         });
-    }
+  }
 
   addProjectClick(){
     console.log('the click function worked!');
@@ -45,7 +44,7 @@ class App extends React.Component {
   fetchProjects(){
     fetch('http://localhost:4040/projects')
       .then(function(res) {
-        console.log('res', res);
+        // console.log('res', res);
         return res.json();
       })
       .catch(function(err) {
@@ -72,7 +71,7 @@ class App extends React.Component {
             <ProjectList projects={this.state.projects} />
           </div>
           <div className="col-md-4">
-            Find a project near me
+            <FindNearbyProject projects={this.state.projects} />
           </div>
         </div>
       </div>
