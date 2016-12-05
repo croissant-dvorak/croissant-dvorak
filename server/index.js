@@ -9,7 +9,6 @@ var config = require('./config.js');
 var cookieParser = require('cookie-parser');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
-var QueryPlugin = require(mongoose-query);
 
 var app = express();
 
