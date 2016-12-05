@@ -1,10 +1,10 @@
 var React = require('react');
 
-const AddProject = () => {
+const AddProject = ({closeAddProject}) => {
 	return (
 	<div>
 		<form>
-			<div onClick={() => closeProject()}><a href='#'>X</a></div>
+			<div onClick={() => closeAddProject()}><a href='#'>X</a></div>
 			<input type="text" placeholder="Project Name" name="name" required="required">Project Name</input>
 			<input type="text" placeholder="Project Owner" name="owner" required="required">Project Owner</input>
 			<input type="text" placeholder="Project Description" name="description" required="required">Project Description</input>

@@ -36,9 +36,14 @@ class App extends React.Component {
   }
 
   addProjectClick(){
-    console.log('the click function worked!');
     this.setState({
       projectEntry: true,
+    });
+  }
+
+  closeAddProjectClick(){
+    this.setState({
+      projectEntry: false,
     });
   }
 
@@ -58,7 +63,7 @@ class App extends React.Component {
   }
 
   render() {
-		var projectEntryComponent = this.state.projectEntry ? <AddProject /> :  <ProjectList projects={this.state.projects} />
+		var projectEntryComponent = this.state.projectEntry ? <AddProject closeAddProject={this.closeAddProjectClick.bind(this)} /> :  <ProjectList projects={this.state.projects} />
 
     return (
       <div>
