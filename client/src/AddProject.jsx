@@ -1,6 +1,6 @@
 var React = require('react');
 
-const AddProject = ({closeAddProject}) => {
+const AddProject = (props) => {
 
 	var afterPost = function() {
 		$("#addProjectForm").submit(function(event){
@@ -12,7 +12,7 @@ const AddProject = ({closeAddProject}) => {
 	return (
 	<div>
 		<form action="/api/projects/" method="post" name="addProjectForm">
-			<div onClick={() => closeAddProject()}><a href='#'>X</a></div>
+			<div onClick={() => props.closeAddProjectClick()}><a href='#'>X</a></div>
 			<label for="name">Project Name</label>
 			<input type="text" placeholder="Project Name" name="name" required="required"></input>
 			
