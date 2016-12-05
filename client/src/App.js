@@ -3,7 +3,7 @@ const ProjectList = require('./ProjectList.jsx');
 const FindNearbyProject = require('./FindNearbyProject.jsx');
 const AddProject = require('./AddProject.jsx');
 const Buttons = require('./Buttons.jsx');
-
+const LoggingButton = require('./LoggingButton.jsx');
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -49,6 +49,7 @@ class App extends React.Component {
 
     return (
       <div>
+      <LoggingButton />
         <div className="row title-bar">
           <div className="col-md-7 offset-md-1">
           </div>
