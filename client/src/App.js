@@ -1,6 +1,7 @@
 const React = require('react');
 const ProjectList = require('./ProjectList.jsx');
 const FindNearbyProject = require('./FindNearbyProject.jsx');
+const AddProject = require('./AddProject.jsx');
 require('whatwg-fetch');
 
 const Buttons = require('./Buttons.jsx');
@@ -57,8 +58,8 @@ class App extends React.Component {
   }
 
   render() {
-		// var someComponent = this.state.projectEntry ? <ProjectCompoinent/> : <SomeOther />
-    	//add this in the return statement>>>> { someComponent }
+		var projectEntryComponent = this.state.projectEntry ? <AddProject /> :  <ProjectList projects={this.state.projects} />
+
     return (
       <div>
         <div className="row title-bar">
@@ -68,7 +69,7 @@ class App extends React.Component {
         <div className="row">
           <div className="col-md-7 offset-md-1">
             <Buttons addProject={this.addProjectClick.bind(this)} />
-            <ProjectList projects={this.state.projects} />
+            { projectEntryComponent }  
           </div>
           <div className="col-md-4">
             <FindNearbyProject projects={this.state.projects} />
