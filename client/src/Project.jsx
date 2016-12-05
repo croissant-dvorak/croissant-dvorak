@@ -19,7 +19,7 @@ class Project extends React.Component {
 
   componentDidMount() {
     // this.getComments() {
-      
+
     // }
   }
 
@@ -57,14 +57,13 @@ class Project extends React.Component {
         <div className="row">
           <div className="col-md-4 project-small-map">
             <div className="googleMaps">
-
             </div>
           </div>
           <div className="col-md-4 project-description">
             <div>{this.props.project.description}</div>
           </div>
         </div>
-        <div className="row">
+        <div>
             <CommentList comments={this.state.comments} />
         </div>
       </div>

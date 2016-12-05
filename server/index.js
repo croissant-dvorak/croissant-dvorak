@@ -146,7 +146,7 @@ app.post('/api/projects/',
 );
 
 app.get('/api/projects?*', function(req, res) { //requests a specific project DATA, not the react page
-    model.Project.query(req.query, function(error, data){
+    models.Project.query(req.query, function(error, data){
       res.json(error ? {error: error} : data);
     });
 });
