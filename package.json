@@ -18,5 +18,7 @@
   },
   "homepage": "https://github.com/croissant-dvorak/croissant-dvorak#readme",
   "dependencies": {
+    "mongoose-findorcreate": "^0.1.2",
+    "mongoose-query": "^0.2.0"
   }
 }
