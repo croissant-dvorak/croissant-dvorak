@@ -11,17 +11,27 @@ class FindNearbyProject extends React.Component {
       currentSearch: '',
     };
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleSelection = this.handleSelection.bind(this);
   }
 
-  handleChange(event) {
+  handleInputChange(event) {
     console.log('event', event);
     // this.setState({
     //   currentSearch: event.target.value,
     // });
   }
 
+  handleSelection(event) {
+    console.log('selected', event[0].name);
+    // this.setState({
+    //   currentSearch: event.target.value,
+    // });
+  }
+
   render() {
+    var myData =  [{name:'Austin', count: 11}, {name:'Dallas', count: 1}];
+
     return (
       <div className="card">
         <form>
@@ -30,17 +40,18 @@ class FindNearbyProject extends React.Component {
             City:
           </label>
           <Typeahead 
-            onInputChange={this.handleChange}
-            onSubmit={console.log('submitting')}
-            options={this.props.projects}
+            onInputChange={this.handleInputChange}
+            onChange={this.handleSelection}
+            options={myData}
             labelKey="name"
+            placeholder="Hati"
             emptyLabel="No projects found in this city."
             renderMenuItemChildren={(props, option, idx) => {
               return (
                 <div>
-                  <em>{option.address.city}
-                  </em><br /  >
-                  <small>{option.description}
+                  <em>{option.name}
+                  </em><br />
+                  <small>{option.count} {option.count > 1 ? 'Projects' : 'Project'}
                   </small>
                 </div>
               )
