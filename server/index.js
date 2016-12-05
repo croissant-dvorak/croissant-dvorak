@@ -9,6 +9,7 @@ var config = require('./config.js');
 var cookieParser = require('cookie-parser');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
+var QueryPlugin = require(mongoose-query);
 
 var app = express();
 
@@ -100,6 +101,7 @@ app.get('/login', function(req, res) {
 
 
 // ----- other ROUTES -----
+// index route
 app.get('/', function(req, res) {
     res.sendFile(path.resolve(__dirname + '/../client/index.html'));
 });
@@ -128,7 +130,7 @@ app.get('/api/account', function(req, res) {
 });
 
 //PROJECT API ROUTES
-app.post('/api/projects',
+app.post('/api/projects/',
     ensureAuthenticated,
     function(req, res) {
         db.postProject(req.body, function(err, result){ //post the project to the db
@@ -144,20 +146,20 @@ app.post('/api/projects',
 );
 
 app.get('/api/projects?*', function(req, res) { //requests a specific project DATA, not the react page
+    db.getProjects(function(err, projects) { // * is a query, need handling for that
+        res.status(200).end(JSON.stringify(projects));
+    });
+});
+
+
+app.get('/api/projects', function(req, res) { //ALL projects, no query (main page?)
     db.getProjects(function(err, projects) {
         res.status(200).end(JSON.stringify(projects));
     });
 });
 
 
-app.get('/api/projects', function(req, res) { //ALL projects
-    db.getProjects(function(err, projects) {
-        res.status(200).end(JSON.stringify(projects));
-    });
-});
-
-
-app.get('/projects', function(req, res) { //requests a
+app.get('/projects', function(req, res) { //requests the loading of the react
     db.getProjects(function(err, projects) {
         res.status(200).end(JSON.stringify(projects));
     });

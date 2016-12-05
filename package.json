@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/croissant-dvorak/croissant-dvorak/issues"
   },
-  "homepage": "https://github.com/croissant-dvorak/croissant-dvorak#readme"
+  "homepage": "https://github.com/croissant-dvorak/croissant-dvorak#readme",
+  "dependencies": {
+    "mongoose-query": "^0.2.0"
+  }
 }
