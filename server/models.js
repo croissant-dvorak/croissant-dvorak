@@ -30,6 +30,7 @@ exports.Project = mongoose.model('Project', projectSchema);
 
 var CommentSchema = mongoose.Schema({
   userId: mongoose.Schema.ObjectId,
+  userName: String,
   projectId: mongoose.Schema.ObjectId,
   textData: String,
   date: Date
