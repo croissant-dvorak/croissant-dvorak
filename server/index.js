@@ -56,7 +56,8 @@ passport.use(new FacebookStrategy(config.fbObj,
       }
 ));
 passport.serializeUser(function(user, done) {
-    console.log('serializeUser', user);
+  console.log('------------')
+  console.log('serializeUser', user)
     done(null, user.facebookId);
 });
 passport.deserializeUser(function(id, done) {
@@ -157,7 +158,7 @@ app.post('/api/projects/',
       console.log('GENDATA', genData)
         db.postProject(genData, function(err, result){ //post the project to the db
             if (err) {
-                res.end('please login!').sendStatus(400);
+                res.end('please login!');
                 console.error(err);
             } else {
                 // console.log('project post result', result);
