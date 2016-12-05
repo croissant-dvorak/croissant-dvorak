@@ -2,8 +2,6 @@ const React = require('react');
 const ProjectList = require('./ProjectList.jsx');
 const FindNearbyProject = require('./FindNearbyProject.jsx');
 const AddProject = require('./AddProject.jsx');
-require('whatwg-fetch');
-
 const Buttons = require('./Buttons.jsx');
 
 class App extends React.Component {
@@ -11,15 +9,14 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-	  data: null,
+      data: [],
       projectEntry: false,
       projects: [],
     };
   }
 
   componentDidMount () {
-    this.fetchProjects();
-    // this.getProjects();
+    this.getProjects();
   }
 
   getProjects() {
@@ -27,7 +24,7 @@ class App extends React.Component {
         $.ajax({
             url: 'http://localhost:4040/projects',
             success: function(data) {
-                this.setState({ data: data });
+                this.setState({ data: JSON.parse(data) });
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -47,23 +44,8 @@ class App extends React.Component {
     });
   }
 
-  fetchProjects(){
-    fetch('http://localhost:4040/projects')
-      .then(function(res) {
-        // console.log('res', res);
-        return res.json();
-      })
-      .catch(function(err) {
-        console.error('err', err);
-      })
-      .then((function(json) {
-        this.setState({ projects: json });
-        console.log('setting state!');
-      }).bind(this));
-  }
-
   render() {
-		var projectEntryComponent = this.state.projectEntry ? <AddProject closeAddProject={this.closeAddProjectClick.bind(this)} /> :  <ProjectList projects={this.state.projects} />
+		var projectEntryComponent = this.state.projectEntry ? <AddProject closeAddProject={this.closeAddProjectClick.bind(this)} /> :  <ProjectList projects={this.state.data} />
 
     return (
       <div>
@@ -77,7 +59,7 @@ class App extends React.Component {
             { projectEntryComponent }  
           </div>
           <div className="col-md-4">
-            <FindNearbyProject projects={this.state.projects} />
+            <FindNearbyProject projects={this.state.data} />
           </div>
         </div>
       </div>

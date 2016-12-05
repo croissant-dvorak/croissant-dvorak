@@ -15,8 +15,7 @@
     "babelify": "^7.2.0",
     "react": "^0.14.6",
     "react-bootstrap-4-typeahead": "^0.8.7",
-    "react-dom": "^0.14.6",
-    "whatwg-fetch": "^2.0.1"
+    "react-dom": "^0.14.6"
   },
   "devDependencies": {
     "live-server": "^1.1.0",
