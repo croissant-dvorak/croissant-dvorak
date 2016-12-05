@@ -15,6 +15,7 @@ class App extends React.Component {
     };
 
     this.viewProject = this.viewProject.bind(this);
+    this.closeAddProjectClick = this.closeAddProjectClick.bind(this);
   }
 
   componentDidMount() {
@@ -43,13 +44,14 @@ class App extends React.Component {
 
   addProjectClick() {
     this.setState({
-      projectEntry: true,
+      currentView: 'addProject',
     });
   }
 
   closeAddProjectClick() {
+    console.log('closeAddProjectClick');
     this.setState({
-      projectEntry: false,
+      currentView: 'projectList',
     });
   }
 
@@ -59,8 +61,8 @@ class App extends React.Component {
         return <ProjectList projects={state.projects} viewProject={this.viewProject} />;
       }.bind(this),
       addProject : function() {
-        return <AddProject closeAddProject={this.closeAddProjectClick} />;
-      },
+        return <AddProject closeAddProjectClick={this.closeAddProjectClick} />;
+      }.bind(this),
       viewProject: function(state) {
         return <Project project={state.projects[0]} />;
       },
