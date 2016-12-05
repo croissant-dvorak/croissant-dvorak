@@ -1,5 +1,6 @@
 const React = require('react');
 const ProjectList = require('./ProjectList.jsx');
+const Project = require('./Project.jsx');
 const FindNearbyProject = require('./FindNearbyProject.jsx');
 const AddProject = require('./AddProject.jsx');
 const Buttons = require('./Buttons.jsx');
@@ -9,58 +10,79 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      data: [],
-      projectEntry: false,
       projects: [],
+      currentView: 'projectList',
     };
+
+    this.viewProject = this.viewProject.bind(this);
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.getProjects();
   }
 
-  getProjects() {
-      console.log('we did it!!!');
-        $.ajax({
-            url: 'http://localhost:4040/projects',
-            success: function(data) {
-                this.setState({ data: JSON.parse(data) });
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
-            }.bind(this),
-        });
+  getProjects(query = '') {
+    $.ajax({
+      url: 'http://localhost:4040/api/projects' + query,
+      success: function(projects) {
+          this.setState({ projects: projects });
+      }.bind(this),
+      error: function(xhr, status, err) {
+          console.error(this.props.url, status, err.toString());
+      }.bind(this),
+    });
   }
 
-  addProjectClick(){
+  viewProject(project) {
+    console.log(project);
+    this.setState({
+      currentView: 'viewProject',
+      projects: [project],
+    });
+  }
+
+  addProjectClick() {
     this.setState({
       projectEntry: true,
     });
   }
 
-  closeAddProjectClick(){
+  closeAddProjectClick() {
     this.setState({
       projectEntry: false,
     });
   }
 
   render() {
-		var projectEntryComponent = this.state.projectEntry ? <AddProject closeAddProject={this.closeAddProjectClick.bind(this)} /> :  <ProjectList projects={this.state.data} />
+    var views = {
+      projectList : function(state) {
+        return <ProjectList projects={state.projects} viewProject={this.viewProject} />;
+      }.bind(this),
+      addProject : function() {
+        return <AddProject closeAddProject={this.closeAddProjectClick} />;
+      },
+      viewProject: function(state) {
+        return <Project project={state.projects[0]} />;
+      },
+    };
+
+    var projectEntryComponent = views[this.state.currentView](this.state);
 
     return (
       <div>
       <LoggingButton />
         <div className="row title-bar">
           <div className="col-md-7 offset-md-1">
+            Title Bar
           </div>
         </div>
-        <div className="row">
+        <div className="row main">
           <div className="col-md-7 offset-md-1">
             <Buttons addProject={this.addProjectClick.bind(this)} />
             { projectEntryComponent }  
           </div>
           <div className="col-md-4">
-            <FindNearbyProject projects={this.state.data} />
+            <FindNearbyProject projects={this.state.projects} />
           </div>
         </div>
       </div>
