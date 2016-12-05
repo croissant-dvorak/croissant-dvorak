@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({
 app.use(session({
     secret: 'favorite food',
     key: 'dvorak',
-    resave: false, // Forces the session to be saved back to the session store, even if the session was never modified during the request. 
+    resave: false, // Forces the session to be saved back to the session store, even if the session was never modified during the request.
     saveUninitialized: false  //Forces a session that is "uninitialized" to be saved to the store.
 }));
 app.use(passport.initialize());
@@ -37,6 +37,8 @@ app.use(function(req, res, next){  // print out requests
     console.log('Received', req.method, req.url);
     next();
 });
+
+// are you sure we need cors?
 app.use(function(req, res, next) { // add cors headers to all responses
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -86,50 +88,81 @@ function ensureAuthenticated(req, res, next) {
     }
 }
 
+// ----- log ROUTES -----
 app.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 });
+//temp fix:
 app.get('/login', function(req, res) {
-    res.sendFile(path.resolve(__dirname + '/../client/testingLogin.html'));
+    res.redirect('/')
 });
-//
-// app.get('/', ensureAuthenticated, function(req, res) {
-//     res.render('index');
-// });
 
 
-// ----- ROUTES -----
+// ----- other ROUTES -----
 app.get('/', function(req, res) {
     res.sendFile(path.resolve(__dirname + '/../client/index.html'));
 });
 
-app.get('/account', function(req, res) {
-    res.render('account', {
-        user: req.user
-    });
+
+// COMMENTS ROUTES
+app.get('/comments/', function(req, res) {
+    //render react comments component
+});
+app.get('/api/comments/*', function(req, res) { //request comments to * where it is the project page id
+  //some db function to get project data
+});
+app.post('/api/comments/', function(req, res) {
+    //some db function to get project data
+    //no query, project id is passed in request
 });
 
-app.post('/projects', 
+
+// ACCOUNT ROUTES
+app.get('/account', function(req, res) {
+    //RENDER ACCOUNT PAGE
+    //this page hits /api/account for data
+});
+app.get('/api/account', function(req, res) {
+  //SEND ACCOUNT DATA via DB call
+});
+
+//PROJECT API ROUTES
+app.post('/api/projects',
     ensureAuthenticated,
     function(req, res) {
-        db.postProject(req.body, function(err, result){
-            if (err) { 
+        db.postProject(req.body, function(err, result){ //post the project to the db
+            if (err) {
                 console.error(err);
             } else {
-                console.log('project post result', result);
-                res.location('/');
-                res.sendStatus(301);
+                // console.log('project post result', result);
+                res.location('/'); //return to index
+                res.sendStatus(201); //201 data good
             }
         });
     }
 );
 
-app.get('/projects', function(req, res) {
+app.get('/api/projects?*', function(req, res) { //requests a specific project DATA, not the react page
     db.getProjects(function(err, projects) {
         res.status(200).end(JSON.stringify(projects));
     });
 });
+
+
+app.get('/api/projects', function(req, res) { //ALL projects
+    db.getProjects(function(err, projects) {
+        res.status(200).end(JSON.stringify(projects));
+    });
+});
+
+
+app.get('/projects', function(req, res) { //requests a
+    db.getProjects(function(err, projects) {
+        res.status(200).end(JSON.stringify(projects));
+    });
+});
+
 
 app.get('/sessions', function(req, res) {
     db.getSession(function(err, session) {
@@ -137,7 +170,7 @@ app.get('/sessions', function(req, res) {
     });
 });
 
-app.post('/users', ensureAuthenticated, function(req, res) {
+app.post('/api/users', ensureAuthenticated, function(req, res) {
     db.postUser(req.body, function(err, result){
         if (err) {
             console.error('Error', err);
@@ -147,7 +180,7 @@ app.post('/users', ensureAuthenticated, function(req, res) {
     });
 });
 
-app.get('/users', function(req, res) {
+app.get('/api/users', function(req, res) {
     db.getUsers(function(err, users) {
         res.status(200).end(JSON.stringify(users));
     });
