@@ -90,8 +90,9 @@ function ensureAuthenticated(req, res, next) {
 
 // ----- log ROUTES -----
 app.get('/logout', function(req, res) {
-    req.logout();
-    res.redirect('/');
+    req.end('logging you out!')
+    // req.logout();
+    // res.redirect('/');
 });
 //temp fix:
 app.get('/login', function(req, res) {
@@ -132,7 +133,29 @@ app.get('/api/account', function(req, res) {
 app.post('/api/projects/',
     ensureAuthenticated,
     function(req, res) {
-        db.postProject(req.body, function(err, result){ //post the project to the db
+      console.log('REQBODY', req.body);
+      var genData = {
+        name: req.body.name,
+        geoLocation : {
+          lat : req.body.lat,
+          long : req.body.long
+        },
+        address : {
+          street : req.body.street,
+          street2 : req.body.street2,
+          zip: req.body.zip,
+          city: req.body.city,
+          state: req.body.state,
+          country: req.body.country
+        },
+        description : req.body.description,
+        owner : req.body,
+        startDate : req.body.startDate,
+        compDate : req.body.compDate,
+        picture: 'null' // url to host?
+      }
+      console.log('GENDATA', genData)
+        db.postProject(genData, function(err, result){ //post the project to the db
             if (err) {
                 res.end('please login!').sendStatus(400);
                 console.error(err);
@@ -146,7 +169,7 @@ app.post('/api/projects/',
 );
 
 app.get('/api/projects?*', function(req, res) { //requests a specific project DATA, not the react page
-    model.Project.query(req.query, function(error, data){
+    models.Project.query(req.query, function(error, data){
       res.json(error ? {error: error} : data);
     });
 });
