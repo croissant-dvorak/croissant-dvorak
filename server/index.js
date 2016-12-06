@@ -109,7 +109,7 @@ app.get('/', function(req, res) {
 });
 
 
-// COMMENTS ROUTES
+// ----- COMMENTS ROUTES -----
 app.get('/api/comments', function(req, res) {
     console.log('in api/comments');
     db.getComments(function(err, comments) {
@@ -141,7 +141,7 @@ app.post('/api/comments', function(req, res) {
 });
 
 
-// ACCOUNT ROUTES
+// ----- ACCOUNT ROUTES -----
 app.get('/account', function(req, res) {
     //RENDER ACCOUNT PAGE
     //this page hits /api/account for data
@@ -150,44 +150,8 @@ app.get('/api/account', function(req, res) {
   //SEND ACCOUNT DATA via DB call
 });
 
-//PROJECT API ROUTES
-// app.post('/api/projects/',
-//     function(req, res) {
-//       console.log('REQBODY', req.body);
-//       var genData = {
-//         name: req.body.name,
-//         geoLocation : {
-//           lat : req.body.lat,
-//           long : req.body.long
-//         },
-//         address : {
-//           street : req.body.street,
-//           street2 : req.body.street2,
-//           zip: req.body.zip,
-//           city: req.body.city,
-//           state: req.body.state,
-//           country: req.body.country
-//         },
-//         description : req.body.description,
-//         owner : req.body,
-//         startDate : req.body.startDate,
-//         compDate : req.body.compDate,
-//         picture: 'null' // url to host?
-//       }
-//       console.log('GENDATA', genData)
-//         db.postProject(genData, function(err, result){ //post the project to the db
-//             if (err) {
-//                 console.error(err);
-//             } else {
-//                 // console.log('project post result', result);
-//                 res.redirect('/'); //return to index
-//                 res.sendStatus(201); //201 data good
-//             }
-//         });
-//     }
-// );
-
-app.post('/api/projects', function(req, res){//post the project to the db
+// ----- PROJECT API ROUTES -----
+app.post('/api/projects', function(req, res){
     db.postProject(req.body, function(err, result){ //post the project to the db
         if (err) {
             console.error(err);
@@ -199,30 +163,32 @@ app.post('/api/projects', function(req, res){//post the project to the db
     });
 });
 
+app.get('/api/projects', function(req, res) {
+    if (req.query.name !== undefined) {
+        req.body = {
+          city: { 
+            $regex: req.query.name,
+          },
+        };
+        console.log('got a name', req.body);
+    }
+    models.Project.find(req.body).limit(5)
+        .then(function(data){
+            // console.log('sending out projects', data);
+            res.json(data);
+        })
+        .catch(function(err){
+            res.json({error : err});
+        })
+});
 
-
-
-app.get('/api/projects', function(req, res) { //ALL projects, no query (main page?)
+app.get('/projects', function(req, res) {
     db.getProjects(function(err, projects) {
-        console.log('sending out projects');
         res.status(200).end(JSON.stringify(projects));
     });
 });
 
-app.get('/api/projects?*', function(req, res) { //requests a specific project DATA, not the react page
-    models.Project.query(req.query, function(error, data){
-        console.log('sending out projects ?*');
-      res.json(error ? {error: error} : data);
-    });
-});
-
-app.get('/projects', function(req, res) { //requests the loading of the react
-    db.getProjects(function(err, projects) {
-        res.status(200).end(JSON.stringify(projects));
-    });
-});
-
-
+// ----- SESSIONS -----
 app.get('/sessions', function(req, res) {
     db.getSession(function(err, session) {
         res.status(200).end(JSON.stringify(session));
@@ -239,6 +205,7 @@ app.post('/api/users', function(req, res) {
     });
 });
 
+// ----- USERS -----
 app.get('/api/users', function(req, res) {
     db.getUsers(function(err, users) {
         res.status(200).end(JSON.stringify(users));
