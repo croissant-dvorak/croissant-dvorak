@@ -18,9 +18,20 @@ class Project extends React.Component {
   }
 
   componentDidMount() {
-    // this.getComments() {
+    this.getComments();
+  }
 
-    // }
+  getComments(query = this.projects._id) {
+    $.ajax({
+      url: window.apiBase + 'projects' + query,
+      success: function(comments) {
+          this.setState({ comments: comments });
+        console.log("new state:", this.state);
+      }.bind(this),
+      error: function(xhr, status, err) {
+          console.error(this.props.url, status, err.toString());
+      }.bind(this),
+    });
   }
 
   handleInputChange(event) {
