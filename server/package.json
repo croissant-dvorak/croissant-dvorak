@@ -4,7 +4,7 @@
   "description": "The backend to croissant-dvorak",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "npm install; nodemon index.js"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
