@@ -18,7 +18,7 @@ class App extends React.Component {
     };
 
     this.viewProject = this.viewProject.bind(this);
-    this.closeAddProjectClick = this.closeAddProjectClick.bind(this);
+    this.viewHome = this.viewHome.bind(this);
   }
 
   componentDidMount() {
@@ -52,12 +52,13 @@ class App extends React.Component {
     });
   }
 
-  closeAddProjectClick() {
+  viewHome() {
     console.log('closeAddProjectClick');
     this.setState({
       currentView: 'projectList',
     });
   }
+
 
   readCookies() {
    var cookieName = Cookies.get('dvorak');
@@ -82,7 +83,7 @@ class App extends React.Component {
         return <ProjectList projects={state.projects} viewProject={this.viewProject} />;
       }.bind(this),
       addProject : function() {
-        return <AddProject closeAddProjectClick={this.closeAddProjectClick} />;
+        return <AddProject viewHome={this.viewHome} viewProject={this.viewProject} />;
       }.bind(this),
       viewProject: function(state) {
         return <Project project={state.projects[0]} />;
