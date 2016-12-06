@@ -7,8 +7,7 @@ var db = require('./db.js');
 var models = require('./models.js');
 var config = require('./config.js');
 var cookieParser = require('cookie-parser');
-var passport = require('passport');
-var FacebookStrategy = require('passport-facebook').Strategy;
+var Facebook = require('facebook-node-sdk');
 
 var app = express();
 
@@ -20,14 +19,7 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-app.use(session({
-    secret: 'favorite food',
-    key: 'dvorak',
-    resave: false, // Forces the session to be saved back to the session store, even if the session was never modified during the request.
-    saveUninitialized: false  //Forces a session that is "uninitialized" to be saved to the store.
-}));
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(Facebook.middleware({ appId: '1808407789415964', secret: config.fbObj.clientSecret }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
@@ -45,49 +37,6 @@ app.use(function(req, res, next) { // add cors headers to all responses
   next();
 });
 
-// ----- PASSPORT FOR AUTH -----
-passport.use(new FacebookStrategy(config.fbObj,
-    function(accessToken, refreshToken, profile, cb) {
-        console.log('profile', profile);
-        models.User.findOrCreate({ facebookId: profile.id, email: profile._json.email }, function (err, user) {
-            console.log('in findOrCreate', user);
-          return cb(err, user);
-        });
-      }
-));
-passport.serializeUser(function(user, done) {
-  console.log('------------')
-  console.log('serializeUser', user)
-    done(null, user.facebookId);
-});
-passport.deserializeUser(function(id, done) {
-    console.log('deserializeUser', id);
-    db.getUserByFacebookId(id, function (err, user) {
-        done(err, user);
-        return 'hello';
-    });
-});
-
-// ----- AUTH ROUTES -----
-app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email']}));
-app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-        failureRedirect: '/login'
-    }),
-    function(req, res) {
-            // Successful authentication, redirect home.
-        res.redirect('/');
-    });
-
-function ensureAuthenticated(req, res, next) {
-    console.log('checking auth');
-    if (req.isAuthenticated()) {
-        console.log('you may passs');
-        return next();
-    } else {
-        console.log('not logged in');
-        res.redirect('/login');
-    }
-}
 
 // ----- log ROUTES -----
 app.get('/logout', function(req, res) {
@@ -96,14 +45,30 @@ app.get('/logout', function(req, res) {
     // res.redirect('/');
 });
 //temp fix:
-app.get('/login', function(req, res) {
-    res.redirect('/auth/facebook')
+app.post('/login', function(req, res) {
+    storeLogin(req)
+    res.end('all good')
 });
 
+app.get('/login', function(req, res) {
+    storeLogin(req)
+    res.end('all good')
+});
+
+app.get('/test', Facebook.loginRequired(), function (req, res) {
+  req.fb.api('/me', function(err, user) {
+    if (err) {
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      res.end('boi u needa log in');
+    }
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.end('Hello, ' + user.name + '!');
+  });
+});
 
 // ----- other ROUTES -----
 // index route
-app.get('/', function(req, res) {
+app.get('/',  Facebook.loginRequired(), function(req, res) {
     res.sendFile(path.resolve(__dirname + '/../client/index.html'));
 });
 
@@ -132,7 +97,6 @@ app.get('/api/account', function(req, res) {
 
 //PROJECT API ROUTES
 app.post('/api/projects/',
-    ensureAuthenticated,
     function(req, res) {
       console.log('REQBODY', req.body);
       var genData = {
@@ -150,7 +114,7 @@ app.post('/api/projects/',
           country: req.body.country
         },
         description : req.body.description,
-        owner : req.body,
+        owner : cookieParser(req.cookie).c_user,
         startDate : req.body.startDate,
         compDate : req.body.compDate,
         picture: 'null' // url to host?
@@ -196,7 +160,7 @@ app.get('/sessions', function(req, res) {
     });
 });
 
-app.post('/api/users', ensureAuthenticated, function(req, res) {
+app.post('/api/users', function(req, res) {
     db.postUser(req.body, function(err, result){
         if (err) {
             console.error('Error', err);
@@ -215,6 +179,18 @@ app.get('/api/users', function(req, res) {
 app.get('/*', function(req, res) {
     res.sendStatus(404);
 });
+
+
+function verifyLogin(req) {
+
+}
+
+function storeLogin(cookies) {
+  console.log('signed', cookies.signedCookies)
+  console.log('--------------')
+  console.log('unsigned', cookies.signedCookies)
+}
+
 
 // ----- LISTEN -----
 var port = process.env.PORT || 4040;
