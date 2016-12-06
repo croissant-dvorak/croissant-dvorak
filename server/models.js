@@ -17,8 +17,8 @@ var projectSchema = mongoose.Schema({
     country: String,
   description : String,
   owner : mongoose.Schema.ObjectId,
-  startDate : Date,
-  compDate : Date,
+  // startDate : Date,
+  // compDate : Date,
   pictureData: Buffer,
   pictureOriginalName: String,
   mimetype: String

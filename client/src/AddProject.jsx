@@ -52,8 +52,6 @@ var viewProject = props.viewProject;
 
 			<input type="number" placeholder="Latitude" name="lat" step="any"></input>
 			<input type="number" placeholder="Longitude" name="long" step="any"></input>
-			<input type="number" placeholder="Latitude" name="lat" step="any" ></input>
-			<input type="number" placeholder="Longitude" name="long" step="any" ></input>
 
 			<label for="">Approximate Start Date</label>
 			<input type="date" name="startDate"></input>

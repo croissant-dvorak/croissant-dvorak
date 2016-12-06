@@ -8,26 +8,28 @@ const CommentInput = props => {
     $.ajax({
       url: '/api/comments', //verify this endpoint
       type: 'POST',
-      data: {project_id: project.id,
-        username: $.('.usernameInput').val(),
-        text_data: $.('.commentInput').val()
+      data: {
+        project_id: project.id,
+        username: $('input[name=userInput]').val(),
+        text_data: $('input[name=newComment]').val()
 
-      }),
+      },
       success: function (commentPost) {
-        console.log("New comment posted");
+        console.log("New comment posted", commentPost);
         //What do we need to do on success?
         //Rerender the commentArea?
       }
 
-  }
+  })
+}
 
   return (
     <form id='commentPostForm' onSubmit={formSubmit}>
       Username:
-      <input class='usernameInput' type='text' name='userInput'>
+      <input type='text' name='userInput' />
       New Comment:
-      <input class='commentInput' type='text' name='newComment'>
-      <input type='submit' value='Add Comment'>
+      <input type='text' name='newComment' />
+      <input type='submit' value='Add Comment' />
     </form>
   )
 };
