@@ -4,7 +4,7 @@ const CommentInput = require('./CommentInput.jsx');
 
 const CommentArea = props => (
   <div>
-  	{<CommentInput project={project}>}
+  	{<CommentInput project={project} user={INSERT USER HERE??>}
   </div> 
   <div>
     {<CommentList comments={comments}>}
