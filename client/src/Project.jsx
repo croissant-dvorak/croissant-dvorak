@@ -1,5 +1,5 @@
 const React = require('react');
-const CommentList = require('./CommentList.jsx');
+const CommentArea = require('./CommentArea.jsx');
 var Typeahead = require('react-bootstrap-4-typeahead').default;
 var data = require('../data.js');
 // import Typeahead from 'react-bootstrap-typeahead';
@@ -64,7 +64,7 @@ class Project extends React.Component {
           </div>
         </div>
         <div>
-            <CommentList comments={this.state.comments} />
+            <CommentArea comments={this.state.comments} />
         </div>
       </div>
     );
