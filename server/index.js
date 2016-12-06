@@ -187,13 +187,14 @@ app.get('/api/account', function(req, res) {
 //     }
 // );
 
-app.post('/api/projects/', function(req, res){//post the project to the db
+app.post('/api/projects', function(req, res){//post the project to the db
     db.postProject(req.body, function(err, result){ //post the project to the db
         if (err) {
             console.error(err);
+            res.sendStatus(400);
         } else {
-            // console.log('project post result', result);
-            res.sendStatus(201); //201 data good
+            console.log('project post result', result);
+            res.status(200).send(result); //201 data good
         }
     });
 });
