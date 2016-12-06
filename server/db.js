@@ -159,7 +159,6 @@ function getSessionById(_id, cb){
     });
 }
 
-<<<<<<< HEAD
 function postSession(session, _id, cb){
   getSessionById(_id, function(err, response) {
     console.log('in post session', err, response)
@@ -190,7 +189,8 @@ function postSession(session, _id, cb){
 }
 
 // ----- BACK METHODS -----
-=======
+
+
 // ----- COMMENT METHODS -----
 
 function getComments(cb){
@@ -203,7 +203,7 @@ function getComments(cb){
       cb(err);
     });
 }
->>>>>>> 21f88f87c6e276fc4c8dfa280c2090adeb8015ed
+
 
 function getCommentByProjectId(projectId, cb){
   models.Comment.find({projectId: projectId})

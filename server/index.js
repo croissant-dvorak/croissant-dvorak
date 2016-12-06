@@ -6,18 +6,12 @@ var path = require('path');
 var db = require('./db.js');
 var models = require('./models.js');
 var config = require('./config.js');
-<<<<<<< HEAD
 var cookie = require('cookie');
-var Session = require('express-session')
 var userFunctions = require('./login.js');
 var bcrypt = require('bcrypt-nodejs');
-=======
 var cookieParser = require('cookie-parser');
-var passport = require('passport');
-var FacebookStrategy = require('passport-facebook').Strategy;
 var multer  = require('multer');
 
->>>>>>> 21f88f87c6e276fc4c8dfa280c2090adeb8015ed
 
 var app = express();
 
@@ -42,31 +36,8 @@ app.use(function(req, res, next) { // add cors headers to all responses
     next();
 });
 
-<<<<<<< HEAD
-=======
-// ----- AUTH ROUTES -----
-app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email']}));
-app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-        failureRedirect: '/login'
-    }),
-    function(req, res) {
-            // Successful authentication, redirect home.
-        res.redirect('/');
-    });
 
-function ensureAuthenticated(req, res, next) {
-    console.log('checking auth');
-    if (req.isAuthenticated()) {
-        console.log('user', req.user);
-        console.log('you may passs');
-        return next();
-    } else {
-        console.log('not logged in');
-        res.redirect('/login');
-    }
-}
 
->>>>>>> 21f88f87c6e276fc4c8dfa280c2090adeb8015ed
 // ----- log ROUTES -----
 app.get('/logout', function(req, res) {
     res.clearCookie('_id')
@@ -103,10 +74,9 @@ app.get('/api/comments', function(req, res) {
         res.status(200).end(JSON.stringify(comments));
     });
 });
-<<<<<<< HEAD
 app.get('/api/comments/*', function(req, res) { //request comments to * where it is the project page id
     //some db function to get project data
-=======
+})
 
 app.get('/api/comments/:projectId', function(req, res) {
     console.log('in api/comments/:projectId');
@@ -114,7 +84,6 @@ app.get('/api/comments/:projectId', function(req, res) {
         console.log('sending out comments');
         res.status(200).end(JSON.stringify(comments));
     });
->>>>>>> 21f88f87c6e276fc4c8dfa280c2090adeb8015ed
 });
 
 
@@ -131,13 +100,6 @@ app.post('/api/comments', function(req, res) {
     });
 });
 
-// ACCOUNT ROUTES
-app.get('/account', function(req, res) {
-    //RENDER ACCOUNT PAGE
-    //this page hits /api/account for data
-});
-app.get('/api/account', function(req, res) {});
-
 app.post('/api/account', function(req, res) {
     db.postUser(JSON.parse(req.body.response), function(err, done) {
         if (err) {
@@ -149,7 +111,6 @@ app.post('/api/account', function(req, res) {
 });
 
 //PROJECT API ROUTES
-<<<<<<< HEAD
 app.post('/api/projects/', function(req, res) {
     verifyLogin(req.get('Cookie')).then(function(response) {
         if (response) {
@@ -201,42 +162,7 @@ app.get('/api/projects?*', function(req, res) { //requests a specific project DA
     });
 });
 
-=======
-// app.post('/api/projects/',
-//     function(req, res) {
-//       console.log('REQBODY', req.body);
-//       var genData = {
-//         name: req.body.name,
-//         geoLocation : {
-//           lat : req.body.lat,
-//           long : req.body.long
-//         },
-//         address : {
-//           street : req.body.street,
-//           street2 : req.body.street2,
-//           zip: req.body.zip,
-//           city: req.body.city,
-//           state: req.body.state,
-//           country: req.body.country
-//         },
-//         description : req.body.description,
-//         owner : req.body,
-//         startDate : req.body.startDate,
-//         compDate : req.body.compDate,
-//         picture: 'null' // url to host?
-//       }
-//       console.log('GENDATA', genData)
-//         db.postProject(genData, function(err, result){ //post the project to the db
-//             if (err) {
-//                 console.error(err);
-//             } else {
-//                 // console.log('project post result', result);
-//                 res.redirect('/'); //return to index
-//                 res.sendStatus(201); //201 data good
-//             }
-//         });
-//     }
-// );
+
 
 app.post('/api/projects', upload.single('picture'), function(req, res){//post the project to the db
    console.log("photo?************ ", req.file)
@@ -245,7 +171,7 @@ app.post('/api/projects', upload.single('picture'), function(req, res){//post th
    } else {
    var obj = Object.assign({}, req.body, {pictureData: req.file.buffer, pictureOriginalName: req.file.originalname, mimetype: req.file.mimetype}  )
    }
-   
+
     db.postProject(obj, function(err, result){ //post the project to the db
         if (err) {
             console.error(err);
@@ -264,16 +190,7 @@ app.post('/api/projects', upload.single('picture'), function(req, res){//post th
 
 
 
->>>>>>> 21f88f87c6e276fc4c8dfa280c2090adeb8015ed
-app.get('/api/projects', function(req, res) { //ALL projects, no query (main page?)
-    db.getProjects(function(err, projects) {
-        console.log('sending out projects');
-        res.status(200).end(JSON.stringify(projects));
-    });
-});
 
-<<<<<<< HEAD
-=======
 app.get('/api/projects?*', function(req, res) { //requests a specific project DATA, not the react page
     models.Project.query(req.query, function(error, data){
         console.log('sending out projects ?*');
@@ -281,12 +198,6 @@ app.get('/api/projects?*', function(req, res) { //requests a specific project DA
     });
 });
 
->>>>>>> 21f88f87c6e276fc4c8dfa280c2090adeb8015ed
-app.get('/projects', function(req, res) { //requests the loading of the react
-    db.getProjects(function(err, projects) {
-        res.status(200).end(JSON.stringify(projects));
-    });
-});
 
 app.get('/sessions', function(req, res) {
     db.getSession(function(err, session) {
@@ -295,11 +206,7 @@ app.get('/sessions', function(req, res) {
 });
 
 app.post('/api/users', function(req, res) {
-<<<<<<< HEAD
-    db.postUser(req.body, function(err, result) {
-=======
     db.postUser(req.body, function(err, result){
->>>>>>> 21f88f87c6e276fc4c8dfa280c2090adeb8015ed
         if (err) {
             console.error('Error', err);
         } else {
