@@ -84,7 +84,7 @@ class App extends React.Component {
         <div className="row main">
           <div className="col-md-7 offset-md-1">
             <Buttons addProject={this.addProjectClick.bind(this)} />
-            { projectEntryComponent }  
+            { projectEntryComponent }
           </div>
           <div className="col-md-4">
             <FindNearbyProject projects={this.state.projects} viewProject={this.viewProject} />

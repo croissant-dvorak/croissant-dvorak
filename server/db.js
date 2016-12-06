@@ -11,9 +11,10 @@ module.exports = {
   postProject : postProject,
   getUsers : getUsers,
   getUserById : getUserById,
-  getUserByFacebookId : getUserByFacebookId,
+  getUserByUserName : getUserByUserName,
   postUser : postUser,
   getSessionById : getSessionById,
+  getSession: getSession,
   postSession : postSession,
   getComments : getComments,
   getCommentByProjectId : getCommentByProjectId,
@@ -93,8 +94,8 @@ function getUserById(userId, cb){
     });
 }
 
-function getUserByFacebookId(facebookId, cb){
-  models.User.findOne({facebookId : facebookId})
+function getUserByUserName(username, cb){
+  models.User.findOne({username : username})
     .then(function(res){
       console.log('user' , res);
       cb(null, res);
@@ -106,19 +107,48 @@ function getUserByFacebookId(facebookId, cb){
 }
 
 function postUser(user, cb){
-  models.User(user).save()
+  getUserByUserName(user.username, function(err, response) {
+    if (err === null) {
+      models.User(user).save()
+        .then(function(res){
+          cb(null, res);
+        }).catch(function(err){
+            cb('something went wrong', err);
+      });
+    } else {
+      cb(err)
+    }
+  })
+
+
+}
+
+// ----- SESSION METHODS -----
+
+
+function deleteSession(_id, cb){
+  models.Session.remove({userId: _id})
     .then(function(res){
       cb(null, res);
-    })
+  })
     .catch(function(err){
       cb(err);
     });
 }
 
-// ----- SESSION METHODS -----
 
-function getSessionById(sessionId, cb){
-  models.Session.findOne({sessionId: sessionId})
+function getSession(cookie){
+  console.log('LOOKIN FOR', cookie)
+  return models.Session.findOne({session: cookie})
+    .catch(function(err){
+      console.error('Error', err);
+      cb(err);
+    });
+}
+
+function getSessionById(_id, cb){
+  console.log('LOOKIN FOR', _id)
+  models.Session.findOne({userId: _id})
     .then(function(res){
       console.log('session' , res);
       cb(null, res);
@@ -129,16 +159,37 @@ function getSessionById(sessionId, cb){
     });
 }
 
-function postSession(session, cb){
-  models.Session(session).save()
-    .then(function(res){
-      cb(null, res);
-    })
-    .catch(function(err){
-      console.error('Error', err);
-      cb(err);
-    });
+function postSession(session, _id, cb){
+  getSessionById(_id, function(err, response) {
+    console.log('in post session', err, response)
+    if (response === null) {
+      console.log('creating!, no exist')
+      models.Session(session).save()
+        .then(function(res){
+          cb(null, res);
+        })
+        .catch(function(err){
+          console.error('Error', err);
+          cb(err);
+        });
+    } else if (response) {
+      deleteSession(response.userId, function(err, response) {
+        if (err) console.log(err)
+        models.Session(session).save()
+          .then(function(res){
+            cb(null, res);
+          })
+          .catch(function(err){
+            console.error('Error', err);
+            cb(err);
+          });
+      })
+    }
+  })
 }
+
+// ----- BACK METHODS -----
+
 
 // ----- COMMENT METHODS -----
 
@@ -152,6 +203,7 @@ function getComments(cb){
       cb(err);
     });
 }
+
 
 function getCommentByProjectId(projectId, cb){
   models.Comment.find({projectId: projectId})
