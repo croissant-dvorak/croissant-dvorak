@@ -9,12 +9,15 @@ var config = require('./config.js');
 var cookieParser = require('cookie-parser');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
+var multer  = require('multer');
+
 
 var app = express();
 
 module.exports = app;
 
 // ----- MIDDLEWARE -----
+var upload = multer();
 app.use(express.static(__dirname + '/../client'));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({
@@ -150,9 +153,16 @@ app.get('/api/account', function(req, res) {
   //SEND ACCOUNT DATA via DB call
 });
 
-// ----- PROJECT API ROUTES -----
-app.post('/api/projects', function(req, res){
-    db.postProject(req.body, function(err, result){ //post the project to the db
+// ----- PROJECT ROUTES -----
+app.post('/api/projects', upload.single('picture'), function(req, res){//post the project to the db
+   console.log("photo?************ ", req.file)
+   if (req.file === undefined) {
+    obj = req.body
+   } else {
+   var obj = Object.assign({}, req.body, {pictureData: req.file.buffer, pictureOriginalName: req.file.originalname, mimetype: req.file.mimetype}  )
+   }
+   
+    db.postProject(obj, function(err, result){ //post the project to the db
         if (err) {
             console.error(err);
             res.sendStatus(400);
