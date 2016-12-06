@@ -87,7 +87,7 @@ class App extends React.Component {
             { projectEntryComponent }  
           </div>
           <div className="col-md-4">
-            <FindNearbyProject projects={this.state.projects} />
+            <FindNearbyProject projects={this.state.projects} viewProject={this.viewProject} />
           </div>
         </div>
       </div>

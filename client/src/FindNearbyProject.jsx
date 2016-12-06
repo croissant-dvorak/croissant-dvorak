@@ -1,7 +1,6 @@
 const React = require('react');
 var Typeahead = require('react-bootstrap-4-typeahead').default;
-var data = require('../data.js');
-// import Typeahead from 'react-bootstrap-typeahead';
+const _ = require('lodash'); // needed to debounce
 
 class FindNearbyProject extends React.Component {
   constructor(props) {
@@ -9,29 +8,37 @@ class FindNearbyProject extends React.Component {
 
     this.state = {
       currentSearch: '',
+      projects: [],
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSelection = this.handleSelection.bind(this);
+    this.fetchProjectsForCity = _.debounce(this.fetchProjectsForCity.bind(this), 500);
+  }
+
+  fetchProjectsForCity(city){
+    $.ajax({
+      url: window.apiBase + 'projects',
+      data: {name: city},
+      success: function(projects) {
+          console.log('returned with', projects);
+          this.setState({ projects: projects });
+      }.bind(this),
+      error: function(xhr, status, err) {
+          console.error(this.props.url, status, err.toString());
+      }.bind(this),
+    });
   }
 
   handleInputChange(event) {
-    console.log('event', event);
-    // this.setState({
-    //   currentSearch: event.target.value,
-    // });
+    this.fetchProjectsForCity(event);
   }
 
   handleSelection(event) {
-    console.log('selected', event[0].name);
-    // this.setState({
-    //   currentSearch: event.target.value,
-    // });
+    this.props.viewProject(event[0]);
   }
 
   render() {
-    var myData =  [{name:'Austin', count: 11}, {name:'Dallas', count: 1}];
-
     return (
       <div className="card">
         <form>
@@ -39,11 +46,11 @@ class FindNearbyProject extends React.Component {
           <label>
             City:
           </label>
-          <Typeahead 
+          <Typeahead
             onInputChange={this.handleInputChange}
             onChange={this.handleSelection}
-            options={myData}
-            labelKey="name"
+            options={this.state.projects}
+            labelKey="city"
             placeholder="Hati"
             emptyLabel="No projects found in this city."
             renderMenuItemChildren={(props, option, idx) => {
