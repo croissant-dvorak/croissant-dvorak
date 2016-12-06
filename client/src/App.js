@@ -30,7 +30,7 @@ class App extends React.Component {
     $.ajax({
       url: 'http://localhost:4040/api/projects' + query,
       success: function(projects) {
-          this.setState({ projects: projects });
+          this.setState({ projects: JSON.parse(projects) });
       }.bind(this),
       error: function(xhr, status, err) {
           console.error(this.props.url, status, err.toString());
