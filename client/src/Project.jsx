@@ -21,9 +21,9 @@ class Project extends React.Component {
     this.getComments();
   }
 
-  getComments(query = this.projects._id) {
+  getComments(query = this.state.currentProject._id) {
     $.ajax({
-      url: window.apiBase + 'projects' + query,
+      url: window.apiBase + 'comments/' + query,
       success: function(comments) {
           this.setState({ comments: comments });
         console.log("new state:", this.state);
