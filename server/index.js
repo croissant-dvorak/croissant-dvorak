@@ -192,8 +192,11 @@ app.get('/api/account', function(req, res) {
 
 app.post('/api/projects', upload.single('picture'), function(req, res){//post the project to the db
    console.log("photo?************ ", req.file)
+   if (req.file === undefined) {
+    obj = req.body
+   } else {
    var obj = Object.assign({}, req.body, {pictureData: req.file.buffer, pictureOriginalName: req.file.originalname, mimetype: req.file.mimetype}  )
-   
+   }
     db.postProject(obj, function(err, result){ //post the project to the db
         if (err) {
             console.error(err);
@@ -204,6 +207,8 @@ app.post('/api/projects', upload.single('picture'), function(req, res){//post th
         }
     });
 });
+
+//set up api endpoint specifically for img
 
 
 
