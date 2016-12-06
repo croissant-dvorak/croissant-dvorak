@@ -26,9 +26,11 @@ const AddProject = (props) => {
 	return (
 	<div>
 		<form id="projectPostForm" onSubmit={postForm}>
-			<div onClick={() => closeAddProject()}><a href='#'>X</a></div>
+			<div onClick={() => viewHome()}><a href='#'>X</a></div>
 			<label for="name">Project Name</label>
-			<input type="text" placeholder="Project Name" name="name" required="required"></input>		
+			<input type="text" placeholder="Project Name" name="name" required="required"></input>	
+			
+			
 			<input type="submit" value="Add Project"></input>
 		</form>	
 	</div>
