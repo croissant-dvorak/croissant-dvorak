@@ -44,14 +44,14 @@ var userSchema = mongoose.Schema({
   firstName: String,
   lastName: String,
   email: String,
-  facebookId: String
+  passwordHash: String,
 });
 
 userSchema.plugin(findOrCreate);
 exports.User = mongoose.model('User', userSchema);
 
 var sessionSchema = mongoose.Schema({
-  sessionId: String,
+  session: String,
   userId: mongoose.Schema.ObjectId
 });
 

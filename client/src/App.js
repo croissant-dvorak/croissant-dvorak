@@ -4,7 +4,6 @@ const Project = require('./Project.jsx');
 const FindNearbyProject = require('./FindNearbyProject.jsx');
 const AddProject = require('./AddProject.jsx');
 const Buttons = require('./Buttons.jsx');
-const LoggingButton = require('./LoggingButton.jsx');
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -72,7 +71,6 @@ class App extends React.Component {
 
     return (
       <div>
-      <LoggingButton />
         <div className="row title-bar">
           <div className="col-md-7 offset-md-1">
             Title Bar
@@ -81,7 +79,7 @@ class App extends React.Component {
         <div className="row main">
           <div className="col-md-7 offset-md-1">
             <Buttons addProject={this.addProjectClick.bind(this)} />
-            { projectEntryComponent }  
+            { projectEntryComponent }
           </div>
           <div className="col-md-4">
             <FindNearbyProject projects={this.state.projects} />
