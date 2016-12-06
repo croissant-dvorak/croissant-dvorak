@@ -40,7 +40,7 @@ app.use(function(req, res, next) { // add cors headers to all responses
 
 // ----- log ROUTES -----
 app.get('/logout', function(req, res) {
-    res.clearCookie('_id')
+    res.clearCookie('userId')
     res.clearCookie('session')
     res.redirect('/login')
 })
@@ -112,7 +112,7 @@ app.post('/api/projects', upload.single('picture'), function(req, res){//post th
    } else {
    var obj = Object.assign({}, req.body, {pictureData: req.file.buffer, pictureOriginalName: req.file.originalname, mimetype: req.file.mimetype}  )
    }
-   
+
     db.postProject(obj, function(err, result){ //post the project to the db
         if (err) {
             console.error(err);
@@ -127,7 +127,7 @@ app.post('/api/projects', upload.single('picture'), function(req, res){//post th
 app.get('/api/projects', function(req, res) {
     if (req.query.name !== undefined) {
         req.body = {
-          city: { 
+          city: {
             $regex: req.query.name,
           },
         };
