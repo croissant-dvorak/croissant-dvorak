@@ -15,6 +15,7 @@ module.exports = {
   postUser : postUser,
   getSessionById : getSessionById,
   postSession : postSession,
+  getComments : getComments,
   getCommentByProjectId : getCommentByProjectId,
   getCommentByUserId : getCommentByUserId,
   postComment : postComment
@@ -37,7 +38,6 @@ db.once('open', function () {
 function getProjects(cb){
   models.Project.find()
     .then(function(res){
-      console.log('projects' , res);
       cb(null, res);
   })
     .catch(function(err){
@@ -47,12 +47,11 @@ function getProjects(cb){
 }
 
 function getProjectById(projectId, cb){
-  models.Project.findOne({_id: projectId})
-    .then(function(res){
-      console.log('projects' , res);
+  models.Project.findOne({ _id: projectId })
+    .then(function(res) {
       cb(null, res);
   })
-    .catch(function(err){
+    .catch(function(err) {
       console.error('Error', err);
       cb(err);
     });
@@ -141,12 +140,23 @@ function postSession(session, cb){
     });
 }
 
-// ----- BACK METHODS -----
+// ----- COMMENT METHODS -----
+
+function getComments(cb){
+  models.Comment.find()
+    .then(function(res){
+      cb(null, res);
+  })
+    .catch(function(err){
+      console.error('Error', err);
+      cb(err);
+    });
+}
 
 function getCommentByProjectId(projectId, cb){
-  models.Comment.find({projId: projectId})
+  models.Comment.find({projectId: projectId})
     .then(function(res){
-      console.log('comment for project' , res);
+      console.log('comments for project', res);
       cb(null, res);
   })
     .catch(function(err){
@@ -158,7 +168,7 @@ function getCommentByProjectId(projectId, cb){
 function getCommentByUserId(userId, cb){
   models.Comment.find({userId: userId})
     .then(function(res){
-      console.log('comment for user' , res);
+      console.log('comments for user', res);
       cb(null, res);
   })
     .catch(function(err){
