@@ -64,7 +64,7 @@ class Project extends React.Component {
           </div>
         </div>
         <div>
-            <CommentArea comments={this.state.comments} />
+            <CommentArea comments={this.state.comments} project={this.props.project} />
         </div>
       </div>
     );
