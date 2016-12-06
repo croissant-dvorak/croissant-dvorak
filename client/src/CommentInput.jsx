@@ -12,27 +12,24 @@ const CommentInput = (props) => {
         userId: null,
         projectId: props.project._id,
         userName: null,
-        textData: $('input[name=newComment]').val(),
-        Date: null
-
+        textData: $('input[name=newComment]').val()
       },
       success: function (commentPost) {
         console.log("New comment posted", commentPost);
         //What do we need to do on success?
         //Rerender the commentArea
-        
+
         //Clear the comment input
         $('input[name=newComment').val('');
       }
 
   })
+    //Data created only for console log:
     var data = {
         userId: null,
         projectId: props.project._id,
         userName: null,
-        textData: $('input[name=newComment]').val(),
-        Date: null
-
+        textData: $('input[name=newComment]').val()
       };
       console.log("We posted this object", data);
 }
