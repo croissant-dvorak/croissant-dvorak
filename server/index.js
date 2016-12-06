@@ -17,7 +17,6 @@ module.exports = app;
 
 // ----- MIDDLEWARE -----
 app.use(express.static(__dirname + '/../client'));
-//
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -59,13 +58,7 @@ app.post('/signup', function(req, res) {
 // ----- other ROUTES -----
 // index route
 app.get('/', function(req, res) {
-    verifyLogin(req.get('Cookie')).then(function(response){
-      if (response) {
-          res.sendFile(path.resolve(__dirname + '/../client/index.html'));
-      } else {
-          res.redirect('/login')
-      }
-    })
+    res.sendFile(path.resolve(__dirname + '/../client/index.html'));
 });
 
 // COMMENTS ROUTES
@@ -99,42 +92,45 @@ app.post('/api/account', function(req, res) {
 
 //PROJECT API ROUTES
 app.post('/api/projects/', function(req, res) {
-    if (userFunctions.verifyLogin(req.get('Cookie'))) {
-        var genData = {
-            name: req.body.name,
-            geoLocation: {
-                lat: req.body.lat,
-                long: req.body.long
-            },
-            address: {
-                street: req.body.street,
-                street2: req.body.street2,
-                zip: req.body.zip,
-                city: req.body.city,
-                state: req.body.state,
-                country: req.body.country
-            },
-            description: req.body.description,
-            owner: cookieParser(req.cookie).c_user,
-            startDate: req.body.startDate,
-            compDate: req.body.compDate,
-            picture: 'null' // url to host?
-        }
-        console.log('GENDATA', genData)
-        db.postProject(genData, function(err, result) { //post the project to the db
-            if (err) {
-                res.end('please login!');
-                console.error(err);
-            } else {
-                // console.log('project post result', result);
-                res.redirect('/'); //return to index
-                res.sendStatus(201); //201 data good
+    verifyLogin(req.get('Cookie')).then(function(response) {
+        if (response) {
+            var genData = {
+                name: req.body.name,
+                geoLocation: {
+                    lat: req.body.lat,
+                    long: req.body.long
+                },
+                address: {
+                    street: req.body.street,
+                    street2: req.body.street2,
+                    zip: req.body.zip,
+                    city: req.body.city,
+                    state: req.body.state,
+                    country: req.body.country
+                },
+                description: req.body.description,
+                owner: cookieParser(req.cookie).c_user,
+                startDate: req.body.startDate,
+                compDate: req.body.compDate,
+                picture: 'null' // url to host?
             }
-        });
-    } else {
-        res.redirect('/login')
-    }
-});
+            console.log('GENDATA', genData)
+            db.postProject(genData, function(err, result) { //post the project to the db
+                if (err) {
+                    res.end('please login!');
+                    console.error(err);
+                } else {
+                    // console.log('project post result', result);
+                    res.redirect('/'); //return to index
+                    res.sendStatus(201); //201 data good
+                }
+            });
+        } else {
+            res.redirect('/login')
+        }
+    });
+
+})
 
 app.get('/api/projects?*', function(req, res) { //requests a specific project DATA, not the react page
     models.Project.query(req.query, function(error, data) {
@@ -193,17 +189,17 @@ function storeLogin(cookies) {
 }
 
 function verifyLogin(requestCookie) {
-        var parsedCookie = cookie.parse(requestCookie)
-            return db.getSession(parsedCookie.session, function(err, dataBaseQuery) {
-                if (dataBaseQuery.session === parsedCookie.session) {
-                  console.log('trueeee')
-                  console.log('dataBaseQuery', dataBaseQuery.session)
-                  console.log('parsedCookie', parsedCookie.session)
-                    return true //return all good
-                } else {
-                    return false //this is not a valid user
-                }
-            })
+    var parsedCookie = cookie.parse(requestCookie)
+    return db.getSession(parsedCookie.session, function(err, dataBaseQuery) {
+        if (dataBaseQuery.session === parsedCookie.session) {
+            console.log('trueeee')
+            console.log('dataBaseQuery', dataBaseQuery.session)
+            console.log('parsedCookie', parsedCookie.session)
+            return true //return all good
+        } else {
+            return false //this is not a valid user
+        }
+    })
 }
 
 // ----- LISTEN -----
