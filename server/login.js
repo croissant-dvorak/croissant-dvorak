@@ -1,7 +1,10 @@
 var db = require('./db.js');
 var bcrypt = require('bcrypt-nodejs');
+var cookie = require('cookie');
+
 
 var userFunctions = {}
+
 
 userFunctions.signUp = function(req, res) {
     var userData = req.body
@@ -39,8 +42,8 @@ userFunctions.login = function(req, res) {
         var salt = bcrypt.genSaltSync(1337);
         var hash = bcrypt.hashSync(userData.username + userData._id, salt)
         db.postSession({userId: userData._id, session: hash}, userData._id, function(err, sessionData) {
-            res.cookie('_id', userData._id)
-            res.cookie('session_id', sessionData.session)
+            res.cookie('userId', userData._id)
+            res.cookie('session', sessionData.session)
             console.log('rezzing')
             res.redirect('/')
         })

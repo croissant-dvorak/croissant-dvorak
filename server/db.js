@@ -14,6 +14,7 @@ module.exports = {
   getUserByUserName : getUserByUserName,
   postUser : postUser,
   getSessionById : getSessionById,
+  getSession: getSession,
   postSession : postSession,
   getCommentByProjectId : getCommentByProjectId,
   getCommentByUserId : getCommentByUserId,
@@ -136,7 +137,18 @@ function deleteSession(_id, cb){
     });
 }
 
+
+function getSession(cookie){
+  console.log('LOOKIN FOR', cookie)
+  return models.Session.findOne({session: cookie})
+    .catch(function(err){
+      console.error('Error', err);
+      cb(err);
+    });
+}
+
 function getSessionById(_id, cb){
+  console.log('LOOKIN FOR', _id)
   models.Session.findOne({userId: _id})
     .then(function(res){
       console.log('session' , res);

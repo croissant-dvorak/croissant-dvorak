@@ -6,12 +6,10 @@ var path = require('path');
 var db = require('./db.js');
 var models = require('./models.js');
 var config = require('./config.js');
-var cookieParser = require('cookie-parser');
+var cookie = require('cookie');
 var Session = require('express-session')
-var Facebook = require('facebook-node-sdk');
 var userFunctions = require('./login.js');
 var bcrypt = require('bcrypt-nodejs');
-
 
 var app = express();
 
@@ -19,9 +17,8 @@ module.exports = app;
 
 // ----- MIDDLEWARE -----
 app.use(express.static(__dirname + '/../client'));
-app.use(cookieParser());
+//
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(Facebook.middleware({appId: config.fbObj.clientID, secret: config.fbObj.clientSecret}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(function(req, res, next) { // print out requests
@@ -39,10 +36,10 @@ app.use(function(req, res, next) { // add cors headers to all responses
 
 // ----- log ROUTES -----
 app.get('/logout', function(req, res) {
-    req.end('logging you out!')
-    // req.logout();
-    // res.redirect('/');
-});
+    res.clearCookie('_id')
+    res.clearCookie('session')
+    res.redirect('/login')
+})
 //temp fix:
 app.get('/login', function(req, res) {
     res.sendFile(path.resolve(__dirname + '/../client/login.html'));
@@ -61,8 +58,14 @@ app.post('/signup', function(req, res) {
 
 // ----- other ROUTES -----
 // index route
-app.get('/', Facebook.loginRequired(), function(req, res) {
-    res.sendFile(path.resolve(__dirname + '/../client/index.html'));
+app.get('/', function(req, res) {
+    verifyLogin(req.get('Cookie')).then(function(response){
+      if (response) {
+          res.sendFile(path.resolve(__dirname + '/../client/index.html'));
+      } else {
+          res.redirect('/login')
+      }
+    })
 });
 
 // COMMENTS ROUTES
@@ -96,38 +99,41 @@ app.post('/api/account', function(req, res) {
 
 //PROJECT API ROUTES
 app.post('/api/projects/', function(req, res) {
-    console.log('REQBODY', req.body);
-    var genData = {
-        name: req.body.name,
-        geoLocation: {
-            lat: req.body.lat,
-            long: req.body.long
-        },
-        address: {
-            street: req.body.street,
-            street2: req.body.street2,
-            zip: req.body.zip,
-            city: req.body.city,
-            state: req.body.state,
-            country: req.body.country
-        },
-        description: req.body.description,
-        owner: cookieParser(req.cookie).c_user,
-        startDate: req.body.startDate,
-        compDate: req.body.compDate,
-        picture: 'null' // url to host?
-    }
-    console.log('GENDATA', genData)
-    db.postProject(genData, function(err, result) { //post the project to the db
-        if (err) {
-            res.end('please login!');
-            console.error(err);
-        } else {
-            // console.log('project post result', result);
-            res.redirect('/'); //return to index
-            res.sendStatus(201); //201 data good
+    if (userFunctions.verifyLogin(req.get('Cookie'))) {
+        var genData = {
+            name: req.body.name,
+            geoLocation: {
+                lat: req.body.lat,
+                long: req.body.long
+            },
+            address: {
+                street: req.body.street,
+                street2: req.body.street2,
+                zip: req.body.zip,
+                city: req.body.city,
+                state: req.body.state,
+                country: req.body.country
+            },
+            description: req.body.description,
+            owner: cookieParser(req.cookie).c_user,
+            startDate: req.body.startDate,
+            compDate: req.body.compDate,
+            picture: 'null' // url to host?
         }
-    });
+        console.log('GENDATA', genData)
+        db.postProject(genData, function(err, result) { //post the project to the db
+            if (err) {
+                res.end('please login!');
+                console.error(err);
+            } else {
+                // console.log('project post result', result);
+                res.redirect('/'); //return to index
+                res.sendStatus(201); //201 data good
+            }
+        });
+    } else {
+        res.redirect('/login')
+    }
 });
 
 app.get('/api/projects?*', function(req, res) { //requests a specific project DATA, not the react page
@@ -184,6 +190,20 @@ function storeLogin(cookies) {
     console.log('signed', cookies.signedCookies)
     console.log('--------------')
     console.log('unsigned', cookies.signedCookies)
+}
+
+function verifyLogin(requestCookie) {
+        var parsedCookie = cookie.parse(requestCookie)
+            return db.getSession(parsedCookie.session, function(err, dataBaseQuery) {
+                if (dataBaseQuery.session === parsedCookie.session) {
+                  console.log('trueeee')
+                  console.log('dataBaseQuery', dataBaseQuery.session)
+                  console.log('parsedCookie', parsedCookie.session)
+                    return true //return all good
+                } else {
+                    return false //this is not a valid user
+                }
+            })
 }
 
 // ----- LISTEN -----
