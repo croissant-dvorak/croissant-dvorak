@@ -5,8 +5,6 @@ const Project = require('./Project.jsx');
 const FindNearbyProject = require('./FindNearbyProject.jsx');
 const AddProject = require('./AddProject.jsx');
 const Buttons = require('./Buttons.jsx');
-const LoginButton = require('./LoginButton.jsx');
-const LogoutButton = require('./LogoutButton.jsx')
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -23,7 +21,6 @@ class App extends React.Component {
 
   componentDidMount() {
     this.getProjects();
-    this.readCookies();
   }
 
   getProjects(query = '') {
@@ -59,24 +56,6 @@ class App extends React.Component {
     });
   }
 
-
-  readCookies() {
-   var cookieName = Cookies.get('dvorak');
-   if (cookieName){
-    console.log("cookies", cookieName)
-    this.setState({
-      loginButtonShouldExist: false
-    })
-   } else {
-    console.log("cookies", cookieName)
-
-    Cookies.remove('name')
-    this.setState({
-      loginButtonShouldExist: true
-      })
-   }
-  }
-
   render() {
     var views = {
       projectList : function(state) {
@@ -91,11 +70,9 @@ class App extends React.Component {
     };
 
     var projectEntryComponent = views[this.state.currentView](this.state);
-    var LoginLogoutView = this.state.loginButtonShouldExist ? <LoginButton cookieReader={this.readCookies.bind(this)} /> : <LogoutButton cookieReader={this.readCookies.bind(this)} />
 
     return (
       <div>
-      {LoginLogoutView}
         <div className="row title-bar">
           <div className="col-md-7 offset-md-1">
             Title Bar
