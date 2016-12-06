@@ -36,8 +36,6 @@ const CommentInput = (props) => {
 
   return (
     <form id='commentPostForm' onSubmit={formSubmit}>
-      Username:
-      <input type='text' name='userInput' />
       New Comment:
       <input type='text' name='newComment' />
       <input type='submit' value='Add Comment' />
