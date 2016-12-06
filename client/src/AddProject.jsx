@@ -10,7 +10,8 @@ const AddProject = (props) => {
 		console.log("in postForm function")
 
       e.preventDefault();
-      return $.ajax({
+      console.log("made it past preventDefault");
+       $.ajax({
 		    url: '/api/projects',
 		    type: 'POST',
 		    data: $("#projectPostForm").serialize(),
@@ -30,6 +31,25 @@ const AddProject = (props) => {
 			<label for="name">Project Name</label>
 			<input type="text" placeholder="Project Name" name="name" required="required"></input>	
 			
+			<label for="description">Project Description</label>
+			<input type="text" placeholder="Project Description" name="description" required="required">Project Description</input>
+			
+			<label for="street">Project Address</label>
+			<input type="text" placeholder="Street" name="street" required="required"></input>
+			<input type="text" placeholder="Street Cont'd" name="street2"></input>
+			<input type="text" placeholder="City" name="city" required="required"></input>			
+			<input type="text" placeholder="State" name="state" required="required"></input>
+			<input type="text" placeholder="Country" name="country" required="required"></input>
+			<input type="number" placeholder="Zip Code" name="zip" required="required"></input>
+
+			<label for="lat">Project Latitude & Longitude</label>
+			<input type="number" placeholder="Latitude" name="lat" required="required"></input>
+			<input type="number" placeholder="Longitude" name="long" required="required"></input>
+
+			<label for="">Approximate Start Date</label>
+			<input type="date" name="startDate" required="required"></input>
+			<label for="">Approximate Completion Date</label>
+			<input type="date" name="compDate" required="required"></input>	
 			
 			<input type="submit" value="Add Project"></input>
 		</form>	
