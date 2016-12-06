@@ -42,7 +42,7 @@ class Project extends React.Component {
       <div className="card">
         <div className="row titlebar">
           <div className="col-md-2 thumbnail">
-            <img src={this.props.project.thumbnail}/>
+            {/**<img src={this.props.project.thumbnail}/>*/}
           </div>
           <div className="col-md-4">
             <div>{this.props.project.name}</div>

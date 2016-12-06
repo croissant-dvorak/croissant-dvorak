@@ -9,12 +9,15 @@ var config = require('./config.js');
 var cookieParser = require('cookie-parser');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
+var multer  = require('multer');
+
 
 var app = express();
 
 module.exports = app;
 
 // ----- MIDDLEWARE -----
+var upload = multer();
 app.use(express.static(__dirname + '/../client'));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({
@@ -81,6 +84,7 @@ app.get('/auth/facebook/callback', passport.authenticate('facebook', {
 function ensureAuthenticated(req, res, next) {
     console.log('checking auth');
     if (req.isAuthenticated()) {
+        console.log('user', req.user);
         console.log('you may passs');
         return next();
     } else {
@@ -109,15 +113,34 @@ app.get('/', function(req, res) {
 
 
 // COMMENTS ROUTES
-app.get('/comments/', function(req, res) {
-    //render react comments component
+app.get('/api/comments', function(req, res) {
+    console.log('in api/comments');
+    db.getComments(function(err, comments) {
+        console.log('sending out all comments');
+        res.status(200).end(JSON.stringify(comments));
+    });
 });
-app.get('/api/comments/*', function(req, res) { //request comments to * where it is the project page id
-  //some db function to get project data
+
+app.get('/api/comments/:projectId', function(req, res) {
+    console.log('in api/comments/:projectId');
+    db.getCommentByProjectId(req.params.projectId, function(err, comments) {
+        console.log('sending out comments');
+        res.status(200).end(JSON.stringify(comments));
+    });
 });
-app.post('/api/comments/', function(req, res) {
-    //some db function to get project data
-    //no query, project id is passed in request
+
+
+// app.get('/api/comments/:id', function(req, res) { //request comments to * where it is the project page id
+// });
+app.post('/api/comments', function(req, res) {
+    db.postComment(req.body, function(err, result){ //post the project to the db
+        if (err) {
+            console.error(err);
+        } else {
+            console.log('project comment result', result);
+            res.sendStatus(201); //201 data good
+        }
+    });
 });
 
 
@@ -131,57 +154,73 @@ app.get('/api/account', function(req, res) {
 });
 
 //PROJECT API ROUTES
-app.post('/api/projects/',
-    ensureAuthenticated,
-    function(req, res) {
-      console.log('REQBODY', req.body);
-      var genData = {
-        name: req.body.name,
-        geoLocation : {
-          lat : req.body.lat,
-          long : req.body.long
-        },
-        address : {
-          street : req.body.street,
-          street2 : req.body.street2,
-          zip: req.body.zip,
-          city: req.body.city,
-          state: req.body.state,
-          country: req.body.country
-        },
-        description : req.body.description,
-        owner : req.body,
-        startDate : req.body.startDate,
-        compDate : req.body.compDate,
-        picture: 'null' // url to host?
-      }
-      console.log('GENDATA', genData)
-        db.postProject(genData, function(err, result){ //post the project to the db
-            if (err) {
-                res.end('please login!');
-                console.error(err);
-            } else {
-                // console.log('project post result', result);
-                res.redirect('/'); //return to index
-                res.sendStatus(201); //201 data good
-            }
-        });
-    }
-);
+// app.post('/api/projects/',
+//     function(req, res) {
+//       console.log('REQBODY', req.body);
+//       var genData = {
+//         name: req.body.name,
+//         geoLocation : {
+//           lat : req.body.lat,
+//           long : req.body.long
+//         },
+//         address : {
+//           street : req.body.street,
+//           street2 : req.body.street2,
+//           zip: req.body.zip,
+//           city: req.body.city,
+//           state: req.body.state,
+//           country: req.body.country
+//         },
+//         description : req.body.description,
+//         owner : req.body,
+//         startDate : req.body.startDate,
+//         compDate : req.body.compDate,
+//         picture: 'null' // url to host?
+//       }
+//       console.log('GENDATA', genData)
+//         db.postProject(genData, function(err, result){ //post the project to the db
+//             if (err) {
+//                 console.error(err);
+//             } else {
+//                 // console.log('project post result', result);
+//                 res.redirect('/'); //return to index
+//                 res.sendStatus(201); //201 data good
+//             }
+//         });
+//     }
+// );
 
-app.get('/api/projects?*', function(req, res) { //requests a specific project DATA, not the react page
-    models.Project.query(req.query, function(error, data){
-      res.json(error ? {error: error} : data);
+app.post('/api/projects', upload.single('picture'), function(req, res){//post the project to the db
+   console.log("photo?************ ", req.file)
+   var obj = Object.assign({}, req.body, {pictureData: req.file.buffer, pictureOriginalName: req.file.originalname, mimetype: req.file.mimetype}  )
+   
+    db.postProject(obj, function(err, result){ //post the project to the db
+        if (err) {
+            console.error(err);
+            res.sendStatus(400);
+        } else {
+            console.log('project post result', result);
+            res.status(200).send(result); //201 data good
+        }
     });
 });
+
+
 
 
 app.get('/api/projects', function(req, res) { //ALL projects, no query (main page?)
     db.getProjects(function(err, projects) {
+        console.log('sending out projects');
         res.status(200).end(JSON.stringify(projects));
     });
 });
 
+app.get('/api/projects?*', function(req, res) { //requests a specific project DATA, not the react page
+    models.Project.query(req.query, function(error, data){
+        console.log('sending out projects ?*');
+      res.json(error ? {error: error} : data);
+    });
+});
 
 app.get('/projects', function(req, res) { //requests the loading of the react
     db.getProjects(function(err, projects) {
@@ -196,7 +235,7 @@ app.get('/sessions', function(req, res) {
     });
 });
 
-app.post('/api/users', ensureAuthenticated, function(req, res) {
+app.post('/api/users', function(req, res) {
     db.postUser(req.body, function(err, result){
         if (err) {
             console.error('Error', err);
