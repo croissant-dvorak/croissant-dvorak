@@ -20,6 +20,9 @@ const CommentInput = (props) => {
         console.log("New comment posted", commentPost);
         //What do we need to do on success?
         //Rerender the commentArea
+        
+        //Clear the comment input
+        $('input[name=newComment').val('');
       }
 
   })
