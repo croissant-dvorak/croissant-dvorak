@@ -1,10 +1,12 @@
 const React = require('react');
+const Cookies = require('js-cookie')
 const ProjectList = require('./ProjectList.jsx');
 const Project = require('./Project.jsx');
 const FindNearbyProject = require('./FindNearbyProject.jsx');
 const AddProject = require('./AddProject.jsx');
 const Buttons = require('./Buttons.jsx');
-const LoggingButton = require('./LoggingButton.jsx');
+const LoginButton = require('./LoginButton.jsx');
+const LogoutButton = require('./LogoutButton.jsx')
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -12,21 +14,23 @@ class App extends React.Component {
     this.state = {
       projects: [],
       currentView: 'projectList',
+      loginButtonShouldExist: true
     };
 
     this.viewProject = this.viewProject.bind(this);
-    this.closeAddProjectClick = this.closeAddProjectClick.bind(this);
+    this.viewHome = this.viewHome.bind(this);
   }
 
   componentDidMount() {
     this.getProjects();
+    this.readCookies();
   }
 
   getProjects(query = '') {
     $.ajax({
       url: 'http://localhost:4040/api/projects' + query,
       success: function(projects) {
-          this.setState({ projects: projects });
+          this.setState({ projects: JSON.parse(projects) });
       }.bind(this),
       error: function(xhr, status, err) {
           console.error(this.props.url, status, err.toString());
@@ -48,11 +52,29 @@ class App extends React.Component {
     });
   }
 
-  closeAddProjectClick() {
+  viewHome() {
     console.log('closeAddProjectClick');
     this.setState({
       currentView: 'projectList',
     });
+  }
+
+
+  readCookies() {
+   var cookieName = Cookies.get('dvorak');
+   if (cookieName){
+    console.log("cookies", cookieName)
+    this.setState({
+      loginButtonShouldExist: false
+    })
+   } else {
+    console.log("cookies", cookieName)
+
+    Cookies.remove('name')
+    this.setState({
+      loginButtonShouldExist: true
+      })
+   }
   }
 
   render() {
@@ -61,7 +83,7 @@ class App extends React.Component {
         return <ProjectList projects={state.projects} viewProject={this.viewProject} />;
       }.bind(this),
       addProject : function() {
-        return <AddProject closeAddProjectClick={this.closeAddProjectClick} />;
+        return <AddProject viewHome={this.viewHome} viewProject={this.viewProject} />;
       }.bind(this),
       viewProject: function(state) {
         return <Project project={state.projects[0]} />;
@@ -69,10 +91,11 @@ class App extends React.Component {
     };
 
     var projectEntryComponent = views[this.state.currentView](this.state);
+    var LoginLogoutView = this.state.loginButtonShouldExist ? <LoginButton cookieReader={this.readCookies.bind(this)} /> : <LogoutButton cookieReader={this.readCookies.bind(this)} />
 
     return (
       <div>
-      <LoggingButton />
+      {LoginLogoutView}
         <div className="row title-bar">
           <div className="col-md-7 offset-md-1">
             Title Bar
