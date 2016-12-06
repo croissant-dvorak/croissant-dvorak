@@ -1,26 +1,37 @@
 const React = require('react');
 
 
-const CommentInput = props => {
+const CommentInput = (props) => {
   
   var formSubmit = function(e) {
     e.preventDefault();
     $.ajax({
-      url: '/api/comments', //verify this endpoint
+      url: '/api/comments',
       type: 'POST',
       data: {
-        project_id: project.id,
-        username: $('input[name=userInput]').val(),
-        text_data: $('input[name=newComment]').val()
+        userId: null,
+        projectId: props.project._id,
+        userName: null,
+        textData: $('input[name=newComment]').val(),
+        Date: null
 
       },
       success: function (commentPost) {
         console.log("New comment posted", commentPost);
         //What do we need to do on success?
-        //Rerender the commentArea?
+        //Rerender the commentArea
       }
 
   })
+    var data = {
+        userId: null,
+        projectId: props.project._id,
+        userName: null,
+        textData: $('input[name=newComment]').val(),
+        Date: null
+
+      };
+      console.log("We posted this object", data);
 }
 
   return (
