@@ -30,6 +30,7 @@ var viewProject = props.viewProject;
   }.bind(this)
 
 
+
   return (
     <div>
       <form id="projectPostForm" onSubmit={postForm}>
@@ -37,7 +38,7 @@ var viewProject = props.viewProject;
         <label htmlFor="name">Project Name</label>
         <input type="text" placeholder="Project Name" name="name"></input>
         <label for="description">Project Description</label>
-			<input type="text" placeholder="Project Description" name="description">Project Description</input>
+		<input type="text" placeholder="Project Description" name="description"></input>
 			
 			<label for="street">Project Address</label>
 			<input type="text" placeholder="Street" name="street"></input>
@@ -48,12 +49,16 @@ var viewProject = props.viewProject;
 			<input type="number" placeholder="Zip Code" name="zip"></input>
 
 			<label for="lat">Project Latitude & Longitude</label>
+
 			<input type="number" placeholder="Latitude" name="lat" step="any"></input>
 			<input type="number" placeholder="Longitude" name="long" step="any"></input>
+			<input type="number" placeholder="Latitude" name="lat" step="any" ></input>
+			<input type="number" placeholder="Longitude" name="long" step="any" ></input>
 
 			<label for="">Approximate Start Date</label>
 			<input type="date" name="startDate"></input>
 			<label for="">Approximate Completion Date</label>
+			<input type="date" name="compDate"></input>	
 			<input type="date" name="compDate"></input>	
         <input type="file" name="picture" accept="image/*"></input>
         <input type="submit" value="Add Project"></input>
