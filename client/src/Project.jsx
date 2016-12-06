@@ -1,5 +1,5 @@
 const React = require('react');
-const CommentList = require('./CommentList.jsx');
+const CommentArea = require('./CommentArea.jsx');
 var Typeahead = require('react-bootstrap-4-typeahead').default;
 var data = require('../data.js');
 // import Typeahead from 'react-bootstrap-typeahead';
@@ -42,7 +42,7 @@ class Project extends React.Component {
       <div className="card">
         <div className="row titlebar">
           <div className="col-md-2 thumbnail">
-            <img src={this.props.project.thumbnail}/>
+            {/**<img src={this.props.project.thumbnail}/>*/}
           </div>
           <div className="col-md-4">
             <div>{this.props.project.name}</div>
@@ -64,7 +64,7 @@ class Project extends React.Component {
           </div>
         </div>
         <div>
-            <CommentList comments={this.state.comments} />
+            <CommentArea comments={this.state.comments} project={this.props.project} />
         </div>
       </div>
     );

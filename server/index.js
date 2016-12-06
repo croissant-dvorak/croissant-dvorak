@@ -7,15 +7,18 @@ var db = require('./db.js');
 var models = require('./models.js');
 var config = require('./config.js');
 var cookie = require('cookie');
-var Session = require('express-session')
 var userFunctions = require('./login.js');
 var bcrypt = require('bcrypt-nodejs');
+var cookieParser = require('cookie-parser');
+var multer  = require('multer');
+
 
 var app = express();
 
 module.exports = app;
 
 // ----- MIDDLEWARE -----
+var upload = multer();
 app.use(express.static(__dirname + '/../client'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -32,6 +35,8 @@ app.use(function(req, res, next) { // add cors headers to all responses
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
 });
+
+
 
 // ----- log ROUTES -----
 app.get('/logout', function(req, res) {
@@ -61,25 +66,35 @@ app.get('/', function(req, res) {
     res.sendFile(path.resolve(__dirname + '/../client/index.html'));
 });
 
-// COMMENTS ROUTES
-app.get('/comments/', function(req, res) {
-    //render react comments component
-});
-app.get('/api/comments/*', function(req, res) { //request comments to * where it is the project page id
-    //some db function to get project data
-});
-app.post('/api/comments/', function(req, res) {
-    //some db function to get project data
-    //no query, project id is passed in request
+
+// ----- COMMENTS ROUTES -----
+app.get('/api/comments', function(req, res) {
+    db.getComments(function(err, comments) {
+        console.log('sending out all comments');
+        res.status(200).end(JSON.stringify(comments));
+    });
 });
 
-// ACCOUNT ROUTES
-app.get('/account', function(req, res) {
-    //RENDER ACCOUNT PAGE
-    //this page hits /api/account for data
+app.get('/api/comments/:projectId', function(req, res) {
+    db.getCommentByProjectId(req.params.projectId, function(err, comments) {
+        console.log('sending out comments');
+        res.status(200).end(JSON.stringify(comments));
+    });
 });
-app.get('/api/account', function(req, res) {});
 
+
+// app.get('/api/comments/:id', function(req, res) { //request comments to * where it is the project page id
+// });
+app.post('/api/comments', function(req, res) {
+    db.postComment(req.body, function(err, result){ //post the project to the db
+        if (err) {
+            console.error(err);
+        } else {
+            res.sendStatus(201); //201 data good
+        }
+    });
+});
+// ----- ACCOUNT ROUTES -----
 app.post('/api/account', function(req, res) {
     db.postUser(JSON.parse(req.body.response), function(err, done) {
         if (err) {
@@ -90,70 +105,49 @@ app.post('/api/account', function(req, res) {
     })
 });
 
-//PROJECT API ROUTES
-app.post('/api/projects/', function(req, res) {
-    verifyLogin(req.get('Cookie')).then(function(response) {
-        if (response) {
-            var genData = {
-                name: req.body.name,
-                geoLocation: {
-                    lat: req.body.lat,
-                    long: req.body.long
-                },
-                address: {
-                    street: req.body.street,
-                    street2: req.body.street2,
-                    zip: req.body.zip,
-                    city: req.body.city,
-                    state: req.body.state,
-                    country: req.body.country
-                },
-                description: req.body.description,
-                owner: cookieParser(req.cookie).c_user,
-                startDate: req.body.startDate,
-                compDate: req.body.compDate,
-                picture: 'null' // url to host?
-            }
-            console.log('GENDATA', genData)
-            db.postProject(genData, function(err, result) { //post the project to the db
-                if (err) {
-                    res.end('please login!');
-                    console.error(err);
-                } else {
-                    // console.log('project post result', result);
-                    res.redirect('/'); //return to index
-                    res.sendStatus(201); //201 data good
-                }
-            });
+// ----- PROJECT ROUTES -----
+app.post('/api/projects', upload.single('picture'), function(req, res){//post the project to the db
+   if (req.file === undefined) {
+    obj = req.body
+   } else {
+   var obj = Object.assign({}, req.body, {pictureData: req.file.buffer, pictureOriginalName: req.file.originalname, mimetype: req.file.mimetype}  )
+   }
+   
+    db.postProject(obj, function(err, result){ //post the project to the db
+        if (err) {
+            console.error(err);
+            res.sendStatus(400);
         } else {
-            res.redirect('/login')
+            console.log('project post result', result);
+            res.status(200).send(result); //201 data good
         }
     });
-
-})
-
-app.get('/api/projects?*', function(req, res) { //requests a specific project DATA, not the react page
-    models.Project.query(req.query, function(error, data) {
-        res.json(error
-            ? {
-                error: error
-            }
-            : data);
-    });
 });
 
-app.get('/api/projects', function(req, res) { //ALL projects, no query (main page?)
+app.get('/api/projects', function(req, res) {
+    if (req.query.name !== undefined) {
+        req.body = {
+          city: { 
+            $regex: req.query.name,
+          },
+        };
+    }
+    models.Project.find(req.body).limit(5)
+        .then(function(data){
+            res.json(data);
+        })
+        .catch(function(err){
+            res.json({error : err});
+        })
+});
+
+app.get('/projects', function(req, res) {
     db.getProjects(function(err, projects) {
         res.status(200).end(JSON.stringify(projects));
     });
 });
 
-app.get('/projects', function(req, res) { //requests the loading of the react
-    db.getProjects(function(err, projects) {
-        res.status(200).end(JSON.stringify(projects));
-    });
-});
-
+// ----- SESSIONS -----
 app.get('/sessions', function(req, res) {
     db.getSession(function(err, session) {
         res.status(200).end(JSON.stringify(session));
@@ -161,7 +155,7 @@ app.get('/sessions', function(req, res) {
 });
 
 app.post('/api/users', function(req, res) {
-    db.postUser(req.body, function(err, result) {
+    db.postUser(req.body, function(err, result){
         if (err) {
             console.error('Error', err);
         } else {
@@ -170,6 +164,7 @@ app.post('/api/users', function(req, res) {
     });
 });
 
+// ----- USERS -----
 app.get('/api/users', function(req, res) {
     db.getUsers(function(err, users) {
         res.status(200).end(JSON.stringify(users));
