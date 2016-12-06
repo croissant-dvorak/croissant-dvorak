@@ -11,10 +11,11 @@ class App extends React.Component {
     this.state = {
       projects: [],
       currentView: 'projectList',
+      loginButtonShouldExist: true
     };
 
     this.viewProject = this.viewProject.bind(this);
-    this.closeAddProjectClick = this.closeAddProjectClick.bind(this);
+    this.viewHome = this.viewHome.bind(this);
   }
 
   componentDidMount() {
@@ -25,7 +26,7 @@ class App extends React.Component {
     $.ajax({
       url: 'http://localhost:4040/api/projects' + query,
       success: function(projects) {
-          this.setState({ projects: projects });
+          this.setState({ projects: JSON.parse(projects) });
       }.bind(this),
       error: function(xhr, status, err) {
           console.error(this.props.url, status, err.toString());
@@ -47,7 +48,7 @@ class App extends React.Component {
     });
   }
 
-  closeAddProjectClick() {
+  viewHome() {
     console.log('closeAddProjectClick');
     this.setState({
       currentView: 'projectList',
@@ -60,7 +61,7 @@ class App extends React.Component {
         return <ProjectList projects={state.projects} viewProject={this.viewProject} />;
       }.bind(this),
       addProject : function() {
-        return <AddProject closeAddProjectClick={this.closeAddProjectClick} />;
+        return <AddProject viewHome={this.viewHome} viewProject={this.viewProject} />;
       }.bind(this),
       viewProject: function(state) {
         return <Project project={state.projects[0]} />;

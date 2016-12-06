@@ -16,6 +16,7 @@ module.exports = {
   getSessionById : getSessionById,
   getSession: getSession,
   postSession : postSession,
+  getComments : getComments,
   getCommentByProjectId : getCommentByProjectId,
   getCommentByUserId : getCommentByUserId,
   postComment : postComment
@@ -38,7 +39,6 @@ db.once('open', function () {
 function getProjects(cb){
   models.Project.find()
     .then(function(res){
-      console.log('projects' , res);
       cb(null, res);
   })
     .catch(function(err){
@@ -48,12 +48,11 @@ function getProjects(cb){
 }
 
 function getProjectById(projectId, cb){
-  models.Project.findOne({_id: projectId})
-    .then(function(res){
-      console.log('projects' , res);
+  models.Project.findOne({ _id: projectId })
+    .then(function(res) {
       cb(null, res);
   })
-    .catch(function(err){
+    .catch(function(err) {
       console.error('Error', err);
       cb(err);
     });
@@ -160,6 +159,7 @@ function getSessionById(_id, cb){
     });
 }
 
+<<<<<<< HEAD
 function postSession(session, _id, cb){
   getSessionById(_id, function(err, response) {
     console.log('in post session', err, response)
@@ -190,11 +190,25 @@ function postSession(session, _id, cb){
 }
 
 // ----- BACK METHODS -----
+=======
+// ----- COMMENT METHODS -----
+
+function getComments(cb){
+  models.Comment.find()
+    .then(function(res){
+      cb(null, res);
+  })
+    .catch(function(err){
+      console.error('Error', err);
+      cb(err);
+    });
+}
+>>>>>>> 21f88f87c6e276fc4c8dfa280c2090adeb8015ed
 
 function getCommentByProjectId(projectId, cb){
-  models.Comment.find({projId: projectId})
+  models.Comment.find({projectId: projectId})
     .then(function(res){
-      console.log('comment for project' , res);
+      console.log('comments for project', res);
       cb(null, res);
   })
     .catch(function(err){
@@ -206,7 +220,7 @@ function getCommentByProjectId(projectId, cb){
 function getCommentByUserId(userId, cb){
   models.Comment.find({userId: userId})
     .then(function(res){
-      console.log('comment for user' , res);
+      console.log('comments for user', res);
       cb(null, res);
   })
     .catch(function(err){
