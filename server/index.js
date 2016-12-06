@@ -151,41 +151,42 @@ app.get('/api/account', function(req, res) {
 });
 
 //PROJECT API ROUTES
-app.post('/api/projects/',
-    function(req, res) {
-      console.log('REQBODY', req.body);
-      var genData = {
-        name: req.body.name,
-        geoLocation : {
-          lat : req.body.lat,
-          long : req.body.long
-        },
-        address : {
-          street : req.body.street,
-          street2 : req.body.street2,
-          zip: req.body.zip,
-          city: req.body.city,
-          state: req.body.state,
-          country: req.body.country
-        },
-        description : req.body.description,
-        owner : req.body,
-        startDate : req.body.startDate,
-        compDate : req.body.compDate,
-        picture: 'null' // url to host?
-      }
-      console.log('GENDATA', genData)
-        db.postProject(genData, function(err, result){ //post the project to the db
-            if (err) {
-                console.error(err);
-            } else {
-                // console.log('project post result', result);
-                res.redirect('/'); //return to index
-                res.sendStatus(201); //201 data good
-            }
-        });
-    }
-);
+// app.post('/api/projects/',
+//     function(req, res) {
+//       console.log('REQBODY', req.body);
+//       var genData = {
+//         name: req.body.name,
+//         geoLocation : {
+//           lat : req.body.lat,
+//           long : req.body.long
+//         },
+//         address : {
+//           street : req.body.street,
+//           street2 : req.body.street2,
+//           zip: req.body.zip,
+//           city: req.body.city,
+//           state: req.body.state,
+//           country: req.body.country
+//         },
+//         description : req.body.description,
+//         owner : req.body,
+//         startDate : req.body.startDate,
+//         compDate : req.body.compDate,
+//         picture: 'null' // url to host?
+//       }
+//       console.log('GENDATA', genData)
+//         db.postProject(genData, function(err, result){ //post the project to the db
+//             if (err) {
+//                 console.error(err);
+//             } else {
+//                 // console.log('project post result', result);
+//                 res.redirect('/'); //return to index
+//                 res.sendStatus(201); //201 data good
+//             }
+//         });
+//     }
+// );
+
 app.post('/api/projects/', function(req, res){//post the project to the db
     db.postProject(req.body, function(err, result){ //post the project to the db
         if (err) {
