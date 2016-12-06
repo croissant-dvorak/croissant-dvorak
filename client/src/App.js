@@ -39,7 +39,7 @@ class App extends React.Component {
   }
 
   viewProject(project) {
-    console.log(project);
+    console.log('switch to viewing project', project);
     this.setState({
       currentView: 'viewProject',
       projects: [project],
@@ -53,7 +53,6 @@ class App extends React.Component {
   }
 
   viewHome() {
-    console.log('closeAddProjectClick');
     this.setState({
       currentView: 'projectList',
     });

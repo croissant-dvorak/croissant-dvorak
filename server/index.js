@@ -69,7 +69,6 @@ app.get('/', function(req, res) {
 
 // ----- COMMENTS ROUTES -----
 app.get('/api/comments', function(req, res) {
-    console.log('in api/comments');
     db.getComments(function(err, comments) {
         console.log('sending out all comments');
         res.status(200).end(JSON.stringify(comments));
@@ -77,7 +76,6 @@ app.get('/api/comments', function(req, res) {
 });
 
 app.get('/api/comments/:projectId', function(req, res) {
-    console.log('in api/comments/:projectId');
     db.getCommentByProjectId(req.params.projectId, function(err, comments) {
         console.log('sending out comments');
         res.status(200).end(JSON.stringify(comments));
@@ -92,7 +90,6 @@ app.post('/api/comments', function(req, res) {
         if (err) {
             console.error(err);
         } else {
-            console.log('project comment result', result);
             res.sendStatus(201); //201 data good
         }
     });
@@ -110,7 +107,6 @@ app.post('/api/account', function(req, res) {
 
 // ----- PROJECT ROUTES -----
 app.post('/api/projects', upload.single('picture'), function(req, res){//post the project to the db
-   console.log("photo?************ ", req.file)
    if (req.file === undefined) {
     obj = req.body
    } else {
@@ -135,11 +131,9 @@ app.get('/api/projects', function(req, res) {
             $regex: req.query.name,
           },
         };
-        console.log('got a name', req.body);
     }
     models.Project.find(req.body).limit(5)
         .then(function(data){
-            // console.log('sending out projects', data);
             res.json(data);
         })
         .catch(function(err){

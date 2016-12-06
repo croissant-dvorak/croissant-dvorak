@@ -21,7 +21,6 @@ class FindNearbyProject extends React.Component {
       url: window.apiBase + 'projects',
       data: {name: city},
       success: function(projects) {
-          console.log('returned with', projects);
           this.setState({ projects: projects });
       }.bind(this),
       error: function(xhr, status, err) {
