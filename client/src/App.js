@@ -1,10 +1,13 @@
 const React = require('react');
-const Cookies = require('js-cookie')
 const ProjectList = require('./ProjectList.jsx');
 const Project = require('./Project.jsx');
 const FindNearbyProject = require('./FindNearbyProject.jsx');
 const AddProject = require('./AddProject.jsx');
 const Buttons = require('./Buttons.jsx');
+
+window.apiBase = 'http://localhost:4040/api/'; // dev
+// window.apiBase = 'http://api.aidtracker.com/'; //prod
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -25,9 +28,9 @@ class App extends React.Component {
 
   getProjects(query = '') {
     $.ajax({
-      url: 'http://localhost:4040/api/projects' + query,
+      url: window.apiBase + 'projects' + query,
       success: function(projects) {
-          this.setState({ projects: JSON.parse(projects) });
+          this.setState({ projects: projects });
       }.bind(this),
       error: function(xhr, status, err) {
           console.error(this.props.url, status, err.toString());
