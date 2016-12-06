@@ -1,5 +1,4 @@
 const React = require('react');
-const Cookies = require('js-cookie')
 const ProjectList = require('./ProjectList.jsx');
 const Project = require('./Project.jsx');
 const FindNearbyProject = require('./FindNearbyProject.jsx');
