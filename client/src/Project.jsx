@@ -22,10 +22,12 @@ class Project extends React.Component {
   }
 
   getComments(query = this.state.currentProject._id) {
+    console.log('getComments url', window.apiBase + 'comments/' + query);
     $.ajax({
       url: window.apiBase + 'comments/' + query,
       success: function(comments) {
-          this.setState({ comments: comments });
+        console.log('getComments', comments);
+          this.setState({ comments: JSON.parse(comments) });
         console.log("new state:", this.state);
       }.bind(this),
       error: function(xhr, status, err) {
@@ -75,7 +77,7 @@ class Project extends React.Component {
           </div>
         </div>
         <div>
-            <CommentArea comments={this.state.comments} project={this.props.project} />
+            <CommentArea comments={this.state.comments} project={this.props.project} getComments={this.getComments}/>
         </div>
       </div>
     );

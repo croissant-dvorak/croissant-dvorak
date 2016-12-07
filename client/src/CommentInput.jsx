@@ -17,7 +17,8 @@ const CommentInput = (props) => {
       success: function (commentPost) {
         console.log("New comment posted", commentPost);
         //What do we need to do on success?
-        //Rerender the commentArea
+        //Rerender the Project
+        //props.getComments(query = props.project._id);
 
         //Clear the comment input
         $('input[name=newComment').val('');

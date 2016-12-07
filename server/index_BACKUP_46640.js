@@ -121,6 +121,8 @@ app.post('/api/account', function(req, res) {
 });
 
 // ----- PROJECT ROUTES -----
+<<<<<<< HEAD
+=======
 app.post('/api/projects', upload.single('picture'), function(req, res) {
   if (req.get('Cookie') === undefined) {
       res.redirect('/login');
@@ -154,6 +156,7 @@ app.post('/api/projects', upload.single('picture'), function(req, res) {
 });
 
 
+>>>>>>> master
 app.get('/api/projects', function(req, res) {
     if (req.query.name !== undefined) {
         req.body = {
@@ -171,6 +174,25 @@ app.get('/api/projects', function(req, res) {
         })
 });
 
+<<<<<<< HEAD
+app.post('/api/projects', upload.single('picture'), function(req, res){//post the project to the db
+   if (req.file === undefined) {
+    obj = req.body
+   } else {
+    var obj = Object.assign({}, req.body, {pictureData: req.file.buffer, pictureOriginalName: req.file.originalname, mimetype: req.file.mimetype});
+   }
+    db.postProject(obj, function(err, result){ //post the project to the db
+        if (err) {
+            console.error(err);
+            res.sendStatus(400);
+        } else {
+            console.log('project post result', result);
+            res.status(200).send(result); //201 data good
+        }
+    });
+});
+=======
+>>>>>>> master
 
 // ----- SESSIONS -----
 app.get('/sessions', function(req, res) {

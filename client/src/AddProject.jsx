@@ -36,30 +36,29 @@ var viewProject = props.viewProject;
       <form id="projectPostForm" onSubmit={postForm}>
         <div onClick={() => viewHome()}><a href='#'>X</a></div>
         <label htmlFor="name">Project Name</label>
-        <input type="text" placeholder="Project Name" name="name"></input>
+        <input type="text" placeholder="Project Name" name="name" className="form-control"></input>
         <label for="description">Project Description</label>
-		<input type="text" placeholder="Project Description" name="description"></input>
+		<input type="text" placeholder="Project Description" name="description" className="form-control"></input>
 			
 			<label for="street">Project Address</label>
-			<input type="text" placeholder="Street" name="street"></input>
-			<input type="text" placeholder="Street Cont'd" name="street2"></input>
-			<input type="text" placeholder="City" name="city"></input>			
-			<input type="text" placeholder="State" name="state"></input>
-			<input type="text" placeholder="Country" name="country"></input>
-			<input type="number" placeholder="Zip Code" name="zip"></input>
+			<input type="text" placeholder="Street" name="street" className="form-control"></input>
+			<input type="text" placeholder="Street 2 (optional)" name="street2" className="form-control"></input>
+			<input type="text" placeholder="City" name="city" className="form-control"></input>			
+			<input type="text" placeholder="State" name="state" className="form-control"></input>
+			<input type="text" placeholder="Country" name="country" className="form-control"></input>
+			<input type="number" placeholder="Zip Code" name="zip" className="form-control"></input>
 
 			<label for="lat">Project Latitude & Longitude</label>
 
-			<input type="number" placeholder="Latitude" name="lat" step="any"></input>
-			<input type="number" placeholder="Longitude" name="long" step="any"></input>
+			<input type="number" placeholder="Latitude" name="lat" step="any" className="form-control"></input>
+			<input type="number" placeholder="Longitude" name="long" step="any" className="form-control"></input>
 
 			<label for="">Approximate Start Date</label>
-			<input type="date" name="startDate"></input>
+			<input type="date" name="startDate" className="form-control"></input>
 			<label for="">Approximate Completion Date</label>
-			<input type="date" name="compDate"></input>	
-			<input type="date" name="compDate"></input>	
-        <input type="file" name="picture" accept="image/*"></input>
-        <input type="submit" value="Add Project"></input>
+			<input type="date" name="compDate" className="form-control"></input>	
+        <input type="file" name="picture" accept="image/*" className="form-control-file"></input>
+        <input type="submit" value="Add Project" className="btn btn-primary" ></input>
       </form>  
     </div>
   );
