@@ -44,6 +44,9 @@ class Project extends React.Component {
           <div className="col-md-2 thumbnail">
             <img src={this.imageSrc} height="100%" width="100%" />
           </div>
+      </div>
+        <div className="row titlebar">
+
           <div className="col-md-4">
             <div>{this.props.project.name}</div>
             <div>{this.props.project.city}</div>

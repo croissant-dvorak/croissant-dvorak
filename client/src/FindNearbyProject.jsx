@@ -40,17 +40,16 @@ class FindNearbyProject extends React.Component {
   render() {
     return (
       <div className="card">
-        <form>
-          <span>Find a nearby project</span><br />
+        <form className="sidebar">
+          <span>Find a nearby project:</span><br />
           <label>
-            City:
           </label>
           <Typeahead
             onInputChange={this.handleInputChange}
             onChange={this.handleSelection}
             options={this.state.projects}
             labelKey="city"
-            placeholder="Hati"
+            placeholder="Enter a city"
             emptyLabel="No projects found in this city."
             renderMenuItemChildren={(props, option, idx) => {
               return (

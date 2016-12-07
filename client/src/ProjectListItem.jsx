@@ -14,9 +14,10 @@ const ProjectListItem = (props) => {
         <img src={src} height="100%" width="100%" />
         </div>
         <div className="col-sm-8 col-md-10 projectListItem-Body">
-          <div>{props.project.name}</div>
-          <div>{props.project.city}</div>
-          <div>{props.project.description}</div>
+          <h3 className="title">{props.project.name}</h3>
+          <div className="location-img"></div>
+          <div className="location ">{props.project.city}</div>
+          <div className="proj-description ">{props.project.description}</div>
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ const FindNearbyProject = require('./FindNearbyProject.jsx');
 const Sidebar = () => {
   return (
     // <div className="container">
-      <FindNearbyProject />
+      <FindNearbyProject className="sidebar" />
     // </div>
   );
 };

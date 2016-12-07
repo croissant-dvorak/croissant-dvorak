@@ -5,8 +5,8 @@ const FindNearbyProject = require('./FindNearbyProject.jsx');
 const AddProject = require('./AddProject.jsx');
 const Buttons = require('./Buttons.jsx');
 
-window.apiBase = 'http://localhost:4040/api/'; // dev
-// window.apiBase = 'http://api.aidtracker.com/'; //prod
+// window.apiBase = 'http://localhost:4040/api/'; // dev
+window.apiBase = 'api/'; //prod
 
 class App extends React.Component {
   constructor(props) {
@@ -75,11 +75,6 @@ class App extends React.Component {
 
     return (
       <div>
-        <div className="row title-bar">
-          <div className="col-md-7 offset-md-1">
-            Title Bar
-          </div>
-        </div>
         <div className="row main">
           <div className="col-md-7 offset-md-1">
             <Buttons addProject={this.addProjectClick.bind(this)} />
