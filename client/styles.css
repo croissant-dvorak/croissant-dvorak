@@ -27,6 +27,13 @@ h3 {
  color: #232E4F;
 }
 
+.btn:hover{
+color: #F56560 !important;
+}
+
+.form-control{
+	margin-top: 5px;
+}
 
 .header-title {
 	margin-top: 18%;
@@ -36,6 +43,10 @@ h3 {
 	padding: 0;
 }
 
+.back-btn{
+	display: block;
+	margin: 5px 0;
+}
 .h3container{
 	background-color: #232E4F;
 	padding: 1em 0;
@@ -116,4 +127,9 @@ a:hover{
 
 .sidebar{
 	padding: 10px;
+}
+
+.file-upload{
+	margin-top: 10px;
+	margin-bottom: 10px;
 }

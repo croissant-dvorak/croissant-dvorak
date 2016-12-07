@@ -34,7 +34,7 @@ var viewProject = props.viewProject;
   return (
     <div>
       <form id="projectPostForm" onSubmit={postForm}>
-        <div onClick={() => viewHome()}><a href='#'>X</a></div>
+        <button className="btn back-btn" onClick={() => viewHome()}><a href='#'>Back</a></button>
         <label htmlFor="name">Project Name</label>
         <input type="text" placeholder="Project Name" name="name" className="form-control"></input>
         <label for="description">Project Description</label>
@@ -57,8 +57,8 @@ var viewProject = props.viewProject;
 			<input type="date" name="startDate" className="form-control"></input>
 			<label for="">Approximate Completion Date</label>
 			<input type="date" name="compDate" className="form-control"></input>	
-        <input type="file" name="picture" accept="image/*" className="form-control-file"></input>
-        <input type="submit" value="Add Project" className="btn btn-primary" ></input>
+        <input type="file" name="picture" accept="image/*" className="form-control-file file-upload"></input>
+        <input type="submit" value="Add Project" className="btn" ></input>
       </form>  
     </div>
   );
