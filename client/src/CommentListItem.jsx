@@ -9,7 +9,6 @@ const CommentListItem = (props) => {
         <div className="col-sm-8 col-md-10 commentListItem-Body">
           <div>{props.comment.userName}</div>
           <div>{props.comment.textData}</div>
-          <div>{props.comment.Date.toDateString()}</div>
         </div>
       </div>
     </div>
