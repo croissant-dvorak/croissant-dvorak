@@ -2,7 +2,7 @@ const React = require('react');
 
 
 const CommentInput = (props) => {
-  
+
   var formSubmit = function(e) {
     e.preventDefault();
     $.ajax({
@@ -18,7 +18,7 @@ const CommentInput = (props) => {
         console.log("New comment posted", commentPost);
         //What do we need to do on success?
         //Rerender the Project
-        //props.getComments(query = props.project._id);
+        props.getComments(query = props.project._id);
 
         //Clear the comment input
         $('input[name=newComment').val('');

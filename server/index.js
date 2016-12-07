@@ -80,14 +80,14 @@ app.get('/api/comments/:projectId', function(req, res) {
 
 app.post('/api/comments', function(req, res) {
     if (req.get('Cookie') === undefined) {
-      res.redirect("../login");
+      res.redirect("/login");
     } else {
         verifyLogin(req.get('Cookie')).then(function(result) {
           console.log('verdict', result);
             if (result) {
               postComment(req, res);
             } else {
-              res.redirect('/logout');
+              res.status(301).redirect('/logout');
             }
         });
     }
