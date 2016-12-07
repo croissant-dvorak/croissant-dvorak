@@ -7,21 +7,23 @@
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="styles.css"
 	</head>
 	<body>
 
-		<div class="login">
-		 <div class="container">
-			 <div class="row">
-				 <div class="col-xs-8 login-content">
-					 <h1>Aid Tracker</h1>
-					 <h3>some whitty comment here</h3>
-					 <button> <a href='/login'>Log In</a></button>
-					 <button> <a href='/signup'>Sign Up</a></button>
-				 </div>
+			 <div class="container">
+			 <div class="row login title-bar">
+					 <div class="row">
+					 <button class="log btn col-md-1 offset-md-9"> <a href='/login'>Log In</a></button>
+					 <button class="log btn col-md-1 "> <a href='/signup'>Sign Up</a></button>
+					 </div>
+					 <div class="col-md-7 offset-md-1 title-box">
+					 <h1 class="header-title">Aid Tracker</h1>
+					 </div>
 			 </div>
-		 </div>
-	 </div>
+
+			 </div>
+			 <div class="h3container"><h3 style="color:white;">Real-time accountability in development</h3></div>
 
 		<div id="app" ></div>
 		<script src="build/app.js"></script>
