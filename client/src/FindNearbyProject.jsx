@@ -50,7 +50,7 @@ class FindNearbyProject extends React.Component {
             onChange={this.handleSelection}
             options={this.state.projects}
             labelKey="city"
-            placeholder="Hati"
+            placeholder="Enter a city"
             emptyLabel="No projects found in this city."
             renderMenuItemChildren={(props, option, idx) => {
               return (

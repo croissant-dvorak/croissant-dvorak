@@ -14,7 +14,7 @@ var viewProject = props.viewProject;
     console.log("formData ", formData);
 
     $.ajax({
-      url: 'http://localhost:4040/api/projects',
+      url: '/api/projects',
       type: 'POST',
       data: formData,
       contentType: false,

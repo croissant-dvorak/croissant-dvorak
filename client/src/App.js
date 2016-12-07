@@ -5,8 +5,8 @@ const FindNearbyProject = require('./FindNearbyProject.jsx');
 const AddProject = require('./AddProject.jsx');
 const Buttons = require('./Buttons.jsx');
 
-window.apiBase = 'http://localhost:4040/api/'; // dev
-// window.apiBase = 'http://api.aidtracker.com/'; //prod
+// window.apiBase = 'http://localhost:4040/api/'; // dev
+window.apiBase = 'api/'; //prod
 
 class App extends React.Component {
   constructor(props) {
