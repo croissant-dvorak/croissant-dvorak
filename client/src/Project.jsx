@@ -56,6 +56,7 @@ class Project extends React.Component {
   render() {
     return (
       <div className="card">
+
         <div className="row titlebar">
           <div className="col-md-2 thumbnail">
             <img src={this.imageSrc} height="100%" width="100%" />

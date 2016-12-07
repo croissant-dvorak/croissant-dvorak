@@ -15,7 +15,6 @@ class App extends React.Component {
     this.state = {
       projects: [],
       currentView: 'projectList',
-      loginButtonShouldExist: true
     };
 
     this.viewProject = this.viewProject.bind(this);
@@ -24,7 +23,6 @@ class App extends React.Component {
 
   componentDidMount() {
     this.getProjects();
-    this.addLogout();
   }
 
   getProjects(query = '') {
@@ -59,18 +57,7 @@ class App extends React.Component {
     });
   }
 
-   addLogout() {
-    console.log("cookie crisp ", document.cookie);
-    if(document.cookie){
-      this.setState({
-        loginButtonShouldExist: false,
-      })
-    } else {
-      this.setState({
-        loginButtonShouldExist: true,
-      })
-    }
-  }
+ 
 
   render() {
     var views = {
