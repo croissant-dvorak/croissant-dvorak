@@ -53,10 +53,14 @@ class Project extends React.Component {
   render() {
     return (
       <div className="card">
-        <div className="row titlebar">
-          <div className="col-md-2 thumbnail">
+      <div className="row">
+      <div className="col-md-12 thumbnail project-hero">
             {/**<img src={this.props.project.thumbnail}/>*/}
+
           </div>
+      </div>
+        <div className="row titlebar">
+
           <div className="col-md-4">
             <div>{this.props.project.name}</div>
             <div>{this.props.project.city}</div>
