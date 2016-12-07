@@ -24,10 +24,17 @@
 
 ## Requirements
 
+
+- bcrypt-nodejs
+- Browserify
+- Express
 - Node
 - Mongo
+- Mongoose
+- Multer
 
 ## Development
+- Nodemon
 
 ### Installing Dependencies
 
@@ -43,6 +50,7 @@ This will run npm install in both the client and server folders.
 ### Dev Workflow
 
 Run `npm start` in both the client and server directory.
+Run 'npm run build' within client directory - browserify / React compile
 
 ### Roadmap
 
@@ -53,4 +61,3 @@ View the project roadmap [here](https://github.com/croissant-dvorak/croissant-dv
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 
-test - Bob D
