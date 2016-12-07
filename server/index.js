@@ -37,10 +37,10 @@ app.use(function(req, res, next) { // add cors headers to all responses
 
 // ----- log ROUTES -----
 app.get('/logout', function(req, res) {
-    res.clearCookie('userId')
-    res.clearCookie('session')
-    res.redirect('/login')
-})
+    res.clearCookie('userId');
+    res.clearCookie('session');
+    res.redirect('/login');
+});
 //temp fix:
 app.get('/login', function(req, res) {
     res.sendFile(path.resolve(__dirname + '/../client/login.html'));
@@ -50,12 +50,12 @@ app.get('/signup', function(req, res) {
 });
 
 app.post('/login', function(req, res) {
-    userFunctions.login(req, res)
-})
+    userFunctions.login(req, res);
+});
 
 app.post('/signup', function(req, res) {
-    userFunctions.signUp(req, res)
-})
+    userFunctions.signUp(req, res);
+});
 
 // ----- other ROUTES -----
 // index route
@@ -80,24 +80,23 @@ app.get('/api/comments/:projectId', function(req, res) {
 
 app.post('/api/comments', function(req, res) {
     if (req.get('Cookie') === undefined) {
-      console.log('NO COOKIE')
-        res.redirect('/login')
+      res.redirect("../login");
     } else {
         verifyLogin(req.get('Cookie')).then(function(result) {
-          console.log('verdict', result)
+          console.log('verdict', result);
             if (result) {
-              postComment(req, res)
+              postComment(req, res);
             } else {
-              res.redirect('/logout')
+              res.redirect('/logout');
             }
-        })
+        });
     }
     function postComment(req, res) {
-      var data = req.body
+      var data = req.body;
       db.getUserById( cookie.parse(req.get('Cookie')).userId.match( /[^"]+/g )[1] ).then(function(response) {
-        data.userName = response.username
-        data.userId = response._id
-        console.log('DATA', data)
+        data.userName = response.username;
+        data.userId = response._id;
+        console.log('DATA', data);
         db.postComment(data, function(err, result) { //post the project to the db
             if (err) {
                 console.error(err);
@@ -105,7 +104,7 @@ app.post('/api/comments', function(req, res) {
                 res.sendStatus(201); //201 data good
             }
         });
-      })
+      });
     }
 
 });
@@ -114,29 +113,29 @@ app.post('/api/comments', function(req, res) {
 app.post('/api/account', function(req, res) {
     db.postUser(JSON.parse(req.body.response), function(err, done) {
         if (err) {
-            res.sendStatus(500, err)
+            res.sendStatus(500, err);
         } else {
-            res.end(done)
+            res.end(done);
         }
-    })
+    });
 });
 
 // ----- PROJECT ROUTES -----
 app.post('/api/projects', upload.single('picture'), function(req, res) {
   if (req.get('Cookie') === undefined) {
-      res.redirect('/login')
+      res.redirect('/login');
     } else {
       verifyLogin( req.get('Cookie') ).then(function(result) {
         if (result === true) {
-          console.log('LOGIN verified')
+          console.log('LOGIN verified');
             if (req.file === undefined) {
-                obj = req.body
+                var obj = req.body;
             } else {
                 var obj = Object.assign({}, req.body, {
                     pictureData: req.file.buffer,
                     pictureOriginalName: req.file.originalname,
                     mimetype: req.file.mimetype
-                })
+                });
             }
             db.postProject(obj, function(err, result) { //post the project to the db
                 if (err) {
@@ -148,11 +147,11 @@ app.post('/api/projects', upload.single('picture'), function(req, res) {
                 }
             });
         } else if (result === false) {
-            res.redirect('/logout')
+            res.redirect('/logout');
         }
     });
   }
-})
+});
 
 app.get('/api/projects', function(req, res) {
     if (req.query.name !== undefined) {
@@ -166,7 +165,7 @@ app.get('/api/projects', function(req, res) {
         res.json(data);
     }).catch(function(err) {
         res.json({error: err});
-    })
+    });
 });
 
 app.get('/projects', function(req, res) {
@@ -204,18 +203,18 @@ app.get('/*', function(req, res) {
 });
 
 function verifyLogin(requestCookie) {
-  console.log('CHECKING LOGIN')
-    var parsedCookie = cookie.parse(requestCookie)
+  console.log('CHECKING LOGIN');
+    var parsedCookie = cookie.parse(requestCookie);
     return db.getSession(parsedCookie.session).then(function(dataBaseQuery) {
-      console.log('-------comparing--------')
+      console.log('-------comparing--------');
         if (dataBaseQuery.session === parsedCookie.session) {
-            console.log('dataBaseQuery', dataBaseQuery.session)
-            console.log('parsedCookie', parsedCookie.session)
-            return true //return all good
+            console.log('dataBaseQuery', dataBaseQuery.session);
+            console.log('parsedCookie', parsedCookie.session);
+            return true; //return all good
         } else {
-            return false //this is not a valid user
+            return false; //this is not a valid user
         }
-    })
+    });
 }
 
 // ----- LISTEN -----
