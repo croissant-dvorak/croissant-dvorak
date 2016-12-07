@@ -123,7 +123,10 @@ app.post('/api/account', function(req, res) {
 
 // ----- PROJECT ROUTES -----
 app.post('/api/projects', upload.single('picture'), function(req, res) {
-    verifyLogin(req.get('Cookies')).then(function(result) {
+  if (req.get('Cookie') === undefined) {
+      res.redirect('/login')
+    } else {
+      verifyLogin( req.get('Cookie') ).then(function(result) {
         if (result === true) {
             if (req.file === undefined) {
                 obj = req.body
@@ -147,6 +150,7 @@ app.post('/api/projects', upload.single('picture'), function(req, res) {
             res.redirect('/logout')
         }
     });
+  }
 })
 
 app.get('/api/projects', function(req, res) {
