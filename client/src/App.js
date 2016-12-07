@@ -4,6 +4,10 @@ const Project = require('./Project.jsx');
 const FindNearbyProject = require('./FindNearbyProject.jsx');
 const AddProject = require('./AddProject.jsx');
 const Buttons = require('./Buttons.jsx');
+
+window.apiBase = 'http://localhost:4040/api/'; // dev
+// window.apiBase = 'http://api.aidtracker.com/'; //prod
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -11,10 +15,11 @@ class App extends React.Component {
     this.state = {
       projects: [],
       currentView: 'projectList',
+      loginButtonShouldExist: true
     };
 
     this.viewProject = this.viewProject.bind(this);
-    this.closeAddProjectClick = this.closeAddProjectClick.bind(this);
+    this.viewHome = this.viewHome.bind(this);
   }
 
   componentDidMount() {
@@ -23,7 +28,7 @@ class App extends React.Component {
 
   getProjects(query = '') {
     $.ajax({
-      url: 'http://localhost:4040/api/projects' + query,
+      url: window.apiBase + 'projects' + query,
       success: function(projects) {
           this.setState({ projects: projects });
       }.bind(this),
@@ -34,7 +39,7 @@ class App extends React.Component {
   }
 
   viewProject(project) {
-    console.log(project);
+    console.log('switch to viewing project', project);
     this.setState({
       currentView: 'viewProject',
       projects: [project],
@@ -47,8 +52,7 @@ class App extends React.Component {
     });
   }
 
-  closeAddProjectClick() {
-    console.log('closeAddProjectClick');
+  viewHome() {
     this.setState({
       currentView: 'projectList',
     });
@@ -60,7 +64,7 @@ class App extends React.Component {
         return <ProjectList projects={state.projects} viewProject={this.viewProject} />;
       }.bind(this),
       addProject : function() {
-        return <AddProject closeAddProjectClick={this.closeAddProjectClick} />;
+        return <AddProject viewHome={this.viewHome} viewProject={this.viewProject} />;
       }.bind(this),
       viewProject: function(state) {
         return <Project project={state.projects[0]} />;
@@ -77,7 +81,7 @@ class App extends React.Component {
             { projectEntryComponent }
           </div>
           <div className="col-md-4">
-            <FindNearbyProject projects={this.state.projects} />
+            <FindNearbyProject projects={this.state.projects} viewProject={this.viewProject} />
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 const React = require('react');
 const CommentListItem = require('./CommentListItem.jsx');
 
-const CommentList = props => (
+const CommentList = (props) => (
   <div>
     {props.comments.map((comm, idx) => <CommentsListItem project={comm} key={idx} />)}
   </div>

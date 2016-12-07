@@ -47,9 +47,15 @@ class FindNearbyProject extends React.Component {
           <Typeahead
             onInputChange={this.handleInputChange}
             onChange={this.handleSelection}
+<<<<<<< HEAD
+            options={myData}
+            labelKey="name"
+            placeholder="Enter City"
+=======
             options={this.state.projects}
             labelKey="city"
             placeholder="Hati"
+>>>>>>> Comments-Db-integration
             emptyLabel="No projects found in this city."
             renderMenuItemChildren={(props, option, idx) => {
               return (
