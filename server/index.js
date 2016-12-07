@@ -196,6 +196,12 @@ app.get('/api/users', function(req, res) {
     });
 });
 
+app.get('/api/users/:id', function(req, res) {
+    db.getUserById(req.params.id, function(err, users) {
+        res.status(200).end(JSON.stringify(users));
+    });
+});
+
 app.get('/*', function(req, res) {
     res.sendStatus(404);
 });
