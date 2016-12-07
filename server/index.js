@@ -128,6 +128,7 @@ app.post('/api/projects', upload.single('picture'), function(req, res) {
     } else {
       verifyLogin( req.get('Cookie') ).then(function(result) {
         if (result === true) {
+          console.log('LOGIN verified')
             if (req.file === undefined) {
                 obj = req.body
             } else {
@@ -203,10 +204,11 @@ app.get('/*', function(req, res) {
 });
 
 function verifyLogin(requestCookie) {
+  console.log('CHECKING LOGIN')
     var parsedCookie = cookie.parse(requestCookie)
-    return db.getSession(parsedCookie.session, function(err, dataBaseQuery) {
+    return db.getSession(parsedCookie.session).then(function(dataBaseQuery) {
+      console.log('-------comparing--------')
         if (dataBaseQuery.session === parsedCookie.session) {
-            console.log('-------comparing--------')
             console.log('dataBaseQuery', dataBaseQuery.session)
             console.log('parsedCookie', parsedCookie.session)
             return true //return all good
