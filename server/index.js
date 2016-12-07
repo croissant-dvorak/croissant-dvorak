@@ -12,7 +12,6 @@ var bcrypt = require('bcrypt-nodejs');
 var cookieParser = require('cookie-parser');
 var multer  = require('multer');
 
-
 var app = express();
 
 module.exports = app;
@@ -160,6 +159,12 @@ app.post('/api/users', function(req, res) {
 // ----- USERS -----
 app.get('/api/users', function(req, res) {
     db.getUsers(function(err, users) {
+        res.status(200).end(JSON.stringify(users));
+    });
+});
+
+app.get('/api/users/:id', function(req, res) {
+    db.getUserById(req.params.id, function(err, users) {
         res.status(200).end(JSON.stringify(users));
     });
 });

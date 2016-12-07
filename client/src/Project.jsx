@@ -1,8 +1,5 @@
 const React = require('react');
 const CommentArea = require('./CommentArea.jsx');
-var Typeahead = require('react-bootstrap-4-typeahead').default;
-var data = require('../data.js');
-// import Typeahead from 'react-bootstrap-typeahead';
 
 class Project extends React.Component {
   constructor(props) {
@@ -13,14 +10,17 @@ class Project extends React.Component {
       comments: [],
     };
 
+    this.imageSrc = 'public/noImage.png';
+    if ( props.project.pictureData !== undefined) {
+      this.imageSrc = 'data:' + props.project.mimetype + ';base64,' + new Buffer(props.project.pictureData.data).toString('base64');
+    }
+
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSelection = this.handleSelection.bind(this);
   }
 
   componentDidMount() {
-    // this.getComments() {
 
-    // }
   }
 
   handleInputChange(event) {
@@ -42,7 +42,7 @@ class Project extends React.Component {
       <div className="card">
         <div className="row titlebar">
           <div className="col-md-2 thumbnail">
-            {/**<img src={this.props.project.thumbnail}/>*/}
+            <img src={this.imageSrc} height="100%" width="100%" />
           </div>
           <div className="col-md-4">
             <div>{this.props.project.name}</div>
