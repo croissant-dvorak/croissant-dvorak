@@ -32,7 +32,7 @@ class Project extends React.Component {
       }.bind(this),
       error: function(xhr, status, err) {
           console.error(this.props.url, status, err.toString());
-      }.bind(this),
+      },
     });
   }
 
@@ -77,7 +77,7 @@ class Project extends React.Component {
           </div>
         </div>
         <div>
-            <CommentArea comments={this.state.comments} project={this.props.project} getComments={this.getComments}/>
+            <CommentArea comments={this.state.comments} project={this.props.project} getComments={this.getComments.bind(this)}/>
         </div>
       </div>
     );
