@@ -1,7 +1,8 @@
-//CommentListItem.jsx
+const React = require('react');
 
 
 const CommentListItem = (props) => {
+  console.log('CommentListItem');
   return (
     <div className="card">
       <div className="row">
