@@ -83,7 +83,7 @@ class Project extends React.Component {
           </div>
         </div>
         <div>
-            <CommentArea comments={this.state.comments} project={this.props.project} getComments={this.getComments}/>
+            <CommentArea comments={this.state.comments} project={this.props.project} getComments={this.getComments.bind(this)}/>
         </div>
       </div>
     );
