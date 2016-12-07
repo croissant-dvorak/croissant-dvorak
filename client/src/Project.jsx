@@ -18,9 +18,22 @@ class Project extends React.Component {
   }
 
   componentDidMount() {
-    // this.getComments() {
+    this.getComments();
+  }
 
-    // }
+  getComments(query = this.state.currentProject._id) {
+    console.log('getComments url', window.apiBase + 'comments/' + query);
+    $.ajax({
+      url: window.apiBase + 'comments/' + query,
+      success: function(comments) {
+        console.log('getComments', comments);
+          this.setState({ comments: JSON.parse(comments) });
+        console.log("new state:", this.state);
+      }.bind(this),
+      error: function(xhr, status, err) {
+          console.error(this.props.url, status, err.toString());
+      }.bind(this),
+    });
   }
 
   handleInputChange(event) {
@@ -64,7 +77,7 @@ class Project extends React.Component {
           </div>
         </div>
         <div>
-            <CommentArea comments={this.state.comments} project={this.props.project} />
+            <CommentArea comments={this.state.comments} project={this.props.project} getComments={this.getComments}/>
         </div>
       </div>
     );

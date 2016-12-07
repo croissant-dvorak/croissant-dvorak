@@ -4,8 +4,10 @@
   "description": "HackReactor Greenfield Project",
   "main": "index.js",
   "scripts": {
+    "start": "npm run build | nodemon server/index.js",
     "install": "(cd client && npm install) && (cd server && npm install)",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "browserify -t [ babelify --presets [ react ] ] src/index.js -o build/app.js "
   },
   "repository": {
     "type": "git",
