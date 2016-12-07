@@ -82,15 +82,12 @@ function getUsers(cb){
     });
 }
 
-function getUserById(userId, cb){
-  models.User.findOne({_id : userId})
-    .then(function(res){
-      console.log('user' , res);
-      cb(null, res);
-  })
+function getUserById(userId){
+  console.log('`````````````')
+  console.log(userId)
+  return models.User.findOne({ _id: userId })
     .catch(function(err){
       console.error('Error', err);
-      cb(err);
     });
 }
 
