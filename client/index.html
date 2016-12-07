@@ -13,9 +13,9 @@
 
 			 <div class="container">
 			 <div class="row login title-bar">
-					 <div class="row">
-					 <button class="log btn col-md-1 offset-md-9"> <a href='/login'>Log In</a></button>
-					 <button class="log btn col-md-1 "> <a href='/signup'>Sign Up</a></button>
+					 <div class="row login-logout">
+					 <button class="log login btn col-md-1 offset-md-9"> <a href='/login'>Log In</a></button>
+					 <button class="log login btn col-md-1 "> <a href='/signup'>Sign Up</a></button>
 					 </div>
 					 <div class="col-md-7 offset-md-1 title-box">
 					 <h1 class="header-title">Aid Tracker</h1>
@@ -28,5 +28,17 @@
 		<div id="successMessage"></div>
 		<div id="app" ></div>
 		<script src="build/app.js"></script>
+		<!-- <script type="text/javascript">
+			// $(document).ready(function(){
+			// 	addLogout();
+			// })
+			//   var addLogout = function() {
+			//     console.log("cookie crisp ", document.cookie);
+			//     if(document.cookie){
+			//       $('.login').remove()
+			//       $('.login-logout').html('<button class="log btn col-md-1 offset-md-9"> <a href="/logout">Logout</a></button>')
+			//     } 
+			//   }
+		</script> -->
 	</body>
 </html>

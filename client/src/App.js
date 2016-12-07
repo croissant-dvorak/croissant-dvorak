@@ -24,6 +24,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.getProjects();
+    this.addLogout();
   }
 
   getProjects(query = '') {
@@ -56,6 +57,19 @@ class App extends React.Component {
     this.setState({
       currentView: 'projectList',
     });
+  }
+
+   addLogout() {
+    console.log("cookie crisp ", document.cookie);
+    if(document.cookie){
+      this.setState({
+        loginButtonShouldExist: false,
+      })
+    } else {
+      this.setState({
+        loginButtonShouldExist: true,
+      })
+    }
   }
 
   render() {
