@@ -25,7 +25,7 @@ class Project extends React.Component {
     $.ajax({
       url: window.apiBase + 'comments/' + query,
       success: function(comments) {
-          this.setState({ comments: ['testing', 'testing123'] });
+          this.setState({ comments: [{userName: 'Dan', textData: 'testing', Date: new Date()}] });
         console.log("new state:", this.state);
       }.bind(this),
       error: function(xhr, status, err) {
