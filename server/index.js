@@ -122,38 +122,6 @@ app.post('/api/account', function(req, res) {
 });
 
 // ----- PROJECT ROUTES -----
-app.post('/api/projects', upload.single('picture'), function(req, res) {
-  if (req.get('Cookie') === undefined) {
-      res.redirect('/login')
-    } else {
-      verifyLogin( req.get('Cookie') ).then(function(result) {
-        if (result === true) {
-          console.log('LOGIN verified')
-            if (req.file === undefined) {
-                obj = req.body
-            } else {
-                var obj = Object.assign({}, req.body, {
-                    pictureData: req.file.buffer,
-                    pictureOriginalName: req.file.originalname,
-                    mimetype: req.file.mimetype
-                })
-            }
-            db.postProject(obj, function(err, result) { //post the project to the db
-                if (err) {
-                    console.error(err);
-                    res.sendStatus(400);
-                } else {
-                    console.log('project post result', result);
-                    res.status(200).send(result); //201 data good
-                }
-            });
-        } else if (result === false) {
-            res.redirect('/logout')
-        }
-    });
-  }
-})
-
 app.get('/api/projects', function(req, res) {
     if (req.query.name !== undefined) {
         req.body = {
@@ -162,16 +130,29 @@ app.get('/api/projects', function(req, res) {
             }
         };
     }
-    models.Project.find(req.body).limit(5).then(function(data) {
-        res.json(data);
-    }).catch(function(err) {
-        res.json({error: err});
-    })
+    models.Project.find(req.body).sort({'createdAt' : -1}).limit(Number(req.query.l) || 5)
+        .then(function(data){
+            res.json(data);
+        })
+        .catch(function(err){
+            res.json({error : err});
+        })
 });
 
-app.get('/projects', function(req, res) {
-    db.getProjects(function(err, projects) {
-        res.status(200).end(JSON.stringify(projects));
+app.post('/api/projects', upload.single('picture'), function(req, res){//post the project to the db
+   if (req.file === undefined) {
+    obj = req.body
+   } else {
+    var obj = Object.assign({}, req.body, {pictureData: req.file.buffer, pictureOriginalName: req.file.originalname, mimetype: req.file.mimetype});
+   }
+    db.postProject(obj, function(err, result){ //post the project to the db
+        if (err) {
+            console.error(err);
+            res.sendStatus(400);
+        } else {
+            console.log('project post result', result);
+            res.status(200).send(result); //201 data good
+        }
     });
 });
 
