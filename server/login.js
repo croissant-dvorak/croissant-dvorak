@@ -24,17 +24,18 @@ userFunctions.signUp = function(req, res) {
 userFunctions.login = function(req, res) {
     db.getUserByUserName(req.body.username, function(err, returnData) {
       if (err) {
-        res.status(404).end('worng user/pass combo')
+        res.status(404).end('worng user/pass combos')
       } else if (returnData.passwordHash) {
             if (returnData !== [] && req.body.username === returnData.username) {
                 if (bcrypt.compareSync(req.body.password, returnData.passwordHash)) {
                     createSession(returnData, res)
                 } else {
-                  res.status(404).end('worng user/pass combo')
+                  var concat = ('worng user/pass combos, comparing ' + req.body.password + ' ' + returnData.passwordHash)
+                  res.status(404).end(concat)
                 }
             }
         } else {
-          res.status(404).end('worng user/pass combo')
+          res.status(404).end('worng user/pass combos')
         }
     })
 
